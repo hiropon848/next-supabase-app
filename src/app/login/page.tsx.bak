@@ -1,0 +1,128 @@
+'use client'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Label } from '@/components/ui/label'
+
+export default function LoginPage() {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [loading, setLoading] = useState(false)
+    const router = useRouter()
+    const supabase = createClient()
+
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setLoading(true)
+        const { error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+        })
+
+        if (error) {
+            alert(error.message)
+        } else {
+            router.push('/dashboard')
+        }
+        setLoading(false)
+    }
+
+    const handleSignUp = async () => {
+        setLoading(true)
+        const { error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                emailRedirectTo: `${location.origin}/auth/callback`,
+            },
+        })
+
+        if (error) {
+            alert(error.message)
+        } else {
+            alert('Check your email for the confirmation link!')
+        }
+        setLoading(false)
+    }
+
+    return (
+        <div className="flex items-center justify-center min-h-screen bg-[url('/images/main_background.png')] bg-cover bg-top bg-no-repeat bg-fixed px-4 overflow-hidden relative">
+
+            {/* SVG Filter Definition for Liquid Effect */}
+            <svg className="fixed invisible w-0 h-0">
+                <defs>
+                    <filter id="liquid-glass">
+                        {/* turbulence creates the 'water' noise pattern */}
+                        <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="2" result="noise" />
+                        {/* displacementMap uses the noise to warp the background pixels */}
+                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="30" xChannelSelector="R" yChannelSelector="G" />
+                        {/* composite adds a bit of lighting/highlight based on alpha */}
+                        <feComposite operator="in" in2="SourceGraphic" />
+                    </filter>
+                </defs>
+            </svg>
+
+            <Card className="w-full max-w-sm border-white/30 shadow-2xl rounded-3xl overflow-hidden relative border bg-transparent">
+
+                {/* 1. Refraction Layer: Mirrors the background with distortion */}
+                <div
+                    className="absolute inset-0 z-0 bg-[url('/images/main_background.png')] bg-cover bg-top bg-no-repeat bg-fixed"
+                    style={{
+                        filter: 'url(#liquid-glass)',
+                        // Slightly larger to prevent edge clipping from distortion, but NO scaling transformation that changes perspective
+                        backgroundPosition: 'center top'
+                    }}
+                />
+
+                {/* 2. Frosted Glass Layer: Adds blur and tint on top of distortion */}
+                <div className="absolute inset-0 z-0 bg-white/10 backdrop-blur-[2px]" />
+
+                <CardHeader className="relative z-10">
+                    <CardTitle className="text-2xl text-white">Login</CardTitle>
+                    <CardDescription className="text-gray-100">
+                        Enter your email below to login to your account.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="relative z-10">
+                    <form onSubmit={handleLogin} className="grid gap-4">
+                        <div className="grid gap-2">
+                            <Label htmlFor="email" className="text-white">Email</Label>
+                            <Input
+                                id="email"
+                                type="email"
+                                placeholder="m@example.com"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="bg-white/20 border-white/30 text-white placeholder:text-gray-300 backdrop-blur-sm"
+                            />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="password" className="text-white">Password</Label>
+                            <Input
+                                id="password"
+                                type="password"
+                                required
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="bg-white/20 border-white/30 text-white backdrop-blur-sm"
+                            />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <Button type="submit" disabled={loading} className="w-full bg-white/90 text-black hover:bg-white/70">
+                                {loading ? 'Loading...' : 'Sign in'}
+                            </Button>
+                            <Button type="button" variant="outline" onClick={handleSignUp} disabled={loading} className="w-full border-white/40 text-white hover:bg-white/20 bg-transparent">
+                                Sign up
+                            </Button>
+                        </div>
+                    </form>
+                </CardContent>
+            </Card>
+        </div>
+    )
+}
