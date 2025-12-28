@@ -57,18 +57,18 @@ export default function LoginPage() {
             <svg className="fixed invisible w-0 h-0">
                 <defs>
                     {/* TRUE EDGE REFRACTION FILTER */}
-                    {/* TRUE EDGE REFRACTION FILTER (Zenn Article Style) */}
+                    {/* 本当の境界屈折フィルター (Zenn記事のスタイル) */}
                     <filter id="liquid-distortion" x="0%" y="0%" width="100%" height="100%">
-                        {/* 1. Low frequency turbulence for organic liquid wave */}
+                        {/* 1. 有機的な液体の波のための低周波乱流 */}
                         <feTurbulence type="fractalNoise" baseFrequency="0.004 0.004" numOctaves="1" seed="0" result="noise" />
 
-                        {/* 2. Blur the noise to remove grain and create smooth waves */}
+                        {/* 2. ノイズをぼかして粒子を取り除き、滑らかな波を作成 */}
                         <feGaussianBlur in="noise" stdDeviation="8" result="blurred" />
 
-                        {/* 3. Adjust intensity using composite arithmetic */}
+                        {/* 3. 複合演算を使用して強度を調整 */}
                         <feComposite operator="arithmetic" k1="0" k2="1" k3="2" k4="0" in="blurred" in2="blurred" result="litImage" />
 
-                        {/* 4. Strong displacement for liquid effect */}
+                        {/* 4. 液体効果のための強力な変位 */}
                         <feDisplacementMap in="SourceGraphic" in2="litImage" scale="-50" xChannelSelector="G" yChannelSelector="G" />
                     </filter>
 
@@ -83,7 +83,7 @@ export default function LoginPage() {
 
             <Card className="w-full max-w-sm rounded-[30px] overflow-hidden relative border-none bg-transparent shadow-[0_30px_60px_rgba(0,0,0,0.6)]">
 
-                {/* Layer 0: SVG Border Overlay */}
+                {/* レイヤー0: SVGボーダーオーバーレイ */}
                 <svg className="absolute inset-0 w-full h-full pointer-events-none z-50">
                     <rect
                         x="0.5" y="0.5"
@@ -96,8 +96,8 @@ export default function LoginPage() {
                     />
                 </svg>
 
-                {/* Layer 1: TRUE REFRACTION ENGINE (No extra blur, just geometrical distortion) */}
-                {/* Layer 1: Edge Distortion (Zenn Policy) */}
+                {/* レイヤー1: 本当の屈折エンジン (追加のぼかしなし、幾何学的歪みのみ) */}
+                {/* レイヤー1: エッジ歪み (Zennのポリシー) */}
                 <div
                     className="absolute inset-0 z-0"
                     style={{
@@ -109,10 +109,10 @@ export default function LoginPage() {
                     }}
                 />
 
-                {/* Layer 2: Subtle Base Blur & Tint */}
+                {/* レイヤー2: 微妙なベースのぼかしと色合い */}
                 <div className="absolute inset-0 z-10 bg-white/[0.01] backdrop-blur-[2px]" />
 
-                {/* Layer 3: Content */}
+                {/* レイヤー3: コンテンツ */}
                 <div className="relative z-30">
                     <CardHeader className="text-center">
                         <CardTitle className="text-2xl font-semibold tracking-tight text-white/95">ログイン</CardTitle>

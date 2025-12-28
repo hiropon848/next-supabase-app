@@ -14,6 +14,6 @@ export async function GET(request: Request) {
         }
     }
 
-    // return the user to an error page with instructions
+    // ユーザーを指示付きのエラーページに戻す
     return NextResponse.redirect(`${origin}/auth/auth-code-error`)
 }
