@@ -37,5 +37,5 @@
     - [x] 入力欄、ボタンの角丸調整 (`rounded-full`, `rounded-lg`)
     - [x] ラベルフォントの太さ調整 (`font-semibold`)
     - [x] 説明文の左揃え (`text-left`)
-- [ ] ソース管理
-    - [ ] GitHub リポジトリへのプッシュ
+- [x] ソース管理
+    - [x] GitHub リポジトリへのプッシュ
