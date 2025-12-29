@@ -52,11 +52,15 @@ const config = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        'neon-red': '#FF1111',
       },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+      },
+      scale: {
+        '97': '0.97',
       },
       keyframes: {
         'accordion-down': {
@@ -67,6 +71,7 @@ const config = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
+
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',

@@ -2,10 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
-import { createClient } from '@/lib/supabase/client';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
   Card,
   CardContent,
@@ -13,18 +9,74 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
+import { FormInput } from '@/components/ui/form-input';
+import { createClient } from '@/lib/supabase/client';
+import { Button } from '@/components/ui/button';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [touched, setTouched] = useState({ email: false, password: false });
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
 
+  const validateEmail = (value: string) => {
+    if (!value) return 'メールアドレスは必須項目です';
+    if (!/\S+@\S+\.\S+/.test(value))
+      return '有効なメールアドレスを入力してください';
+    return null;
+  };
+
+  const validatePassword = (value: string) => {
+    if (!value) return 'パスワードは必須項目です';
+    if (value.length < 6) return 'パスワードは6文字以上で入力してください';
+    return null;
+  };
+
+  const handleBlur = (field: 'email' | 'password') => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+    if (field === 'email') {
+      setEmailError(validateEmail(email));
+    } else {
+      setPasswordError(validatePassword(password));
+    }
+  };
+
+  const handleChange = (field: 'email' | 'password', value: string) => {
+    if (field === 'email') {
+      setEmail(value);
+      if (touched.email || emailError) {
+        setEmailError(validateEmail(value));
+      }
+    } else {
+      setPassword(value);
+      if (touched.password || passwordError) {
+        setPasswordError(validatePassword(value));
+      }
+    }
+  };
+
+  const validateForm = () => {
+    const emailErr = validateEmail(email);
+    const passwordErr = validatePassword(password);
+
+    setEmailError(emailErr);
+    setPasswordError(passwordErr);
+    setTouched({ email: true, password: true });
+
+    if (emailErr || passwordErr) {
+      return false;
+    }
+    return true;
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({
       email,
@@ -40,13 +92,14 @@ export default function LoginPage() {
   };
 
   const handleSignUp = async () => {
+    if (!validateForm()) return;
     setLoading(true);
     const { error } = await supabase.auth.signUp({
       email,
-      password,
       options: {
         emailRedirectTo: `${location.origin}/auth/callback`,
       },
+      password,
     });
 
     if (error) {
@@ -152,7 +205,7 @@ export default function LoginPage() {
         />
 
         {/* レイヤー2: 微妙なベースのぼかしと色合い */}
-        <div className="absolute inset-0 z-10 bg-white/[0.01] backdrop-blur-[2px]" />
+        <div className="absolute inset-0 z-10 bg-black/[0.10] backdrop-blur-[2px]" />
 
         {/* レイヤー3: コンテンツ */}
         <div className="relative z-30">
@@ -165,58 +218,33 @@ export default function LoginPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleLogin} className="grid gap-5">
-              <div className="grid gap-1">
-                <Label
-                  htmlFor="email"
-                  className="pl-1 text-xs font-semibold uppercase tracking-[0.2em] text-white/70"
-                >
-                  メールアドレス
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="name@example.com"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="h-11 rounded-lg border-white/30 bg-white/[0.15] text-white backdrop-blur-[4px] placeholder:text-white/60 focus:border-white/60 focus:bg-white/[0.25] focus-visible:ring-0 focus-visible:ring-offset-0"
-                />
-              </div>
-              <div className="grid gap-1">
-                <Label
-                  htmlFor="password"
-                  className="pl-1 text-xs font-semibold uppercase tracking-[0.2em] text-white/70"
-                >
-                  パスワード
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="h-11 rounded-lg border-white/30 bg-white/[0.15] pr-10 text-white backdrop-blur-[4px] focus:border-white/60 focus:bg-white/[0.25] focus-visible:ring-0 focus-visible:ring-offset-0"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 transition-colors hover:text-white"
-                  >
-                    {showPassword ? (
-                      <MdVisibilityOff size={20} />
-                    ) : (
-                      <MdVisibility size={20} />
-                    )}
-                  </button>
-                </div>
-              </div>
-              <div className="mt-2 flex flex-col gap-3">
+            <form onSubmit={handleLogin} className="grid gap-6 px-1" noValidate>
+              <FormInput
+                id="email"
+                type="email"
+                label="メールアドレス"
+                placeholder="name@example.com"
+                value={email}
+                onChange={(value) => handleChange('email', value)}
+                onBlur={() => handleBlur('email')}
+                error={emailError}
+                required
+              />
+              <FormInput
+                id="password"
+                type="password"
+                label="パスワード"
+                value={password}
+                onChange={(value) => handleChange('password', value)}
+                onBlur={() => handleBlur('password')}
+                error={passwordError}
+                required
+              />
+              <div className="mt-4 flex flex-col gap-3">
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="h-11 w-full rounded-full border-none bg-white/80 text-base font-semibold text-black shadow-lg transition-all hover:bg-white"
+                  className="h-11 w-full rounded-full border-none bg-white/80 text-base font-semibold text-black shadow-lg transition-all hover:bg-white active:scale-97"
                 >
                   {loading ? 'Processing...' : 'ログイン'}
                 </Button>
@@ -225,7 +253,7 @@ export default function LoginPage() {
                   variant="outline"
                   onClick={handleSignUp}
                   disabled={loading}
-                  className="h-11 w-full rounded-full border-white/0 bg-transparent text-base font-semibold text-white shadow-none transition-all hover:bg-white/25 hover:text-white"
+                  className="h-11 w-full rounded-full border-white/0 bg-transparent text-base font-semibold text-white shadow-none transition-all hover:bg-white/25 hover:text-white active:scale-97"
                 >
                   新規アカウント作成
                 </Button>
