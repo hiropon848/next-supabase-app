@@ -34,7 +34,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# media
 *.mp4
-.agent/
-.agent/
-.agent/
+
+# agent system
+.agent/config.env
