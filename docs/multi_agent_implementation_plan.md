@@ -28,13 +28,17 @@
         *   現在どのロール（Requirement Guard, Architect等）で動くべきかを常に意識し、そのロールの定義ファイル（`.agent/workflows/agent_*.md`）を順守する。
     *   **Meta-Rule Compliance:**
         *   自分自身がルールを破ろうとしていないか、常にメタ認知する。
+    *   **Intent Classification (発言意図の分類):**
+        *   ユーザーの発言を「質問/確認」か「依頼（Action）」かを厳格に判定する。
+        *   **Request (依頼):** 「〜してください」「〜して」「作成/実行して」などの**明示的な作業指示が含まれる場合のみ**を指す。
+        *   **Non-Action (それ以外):** 「〜だろ」「〜違反した」「〜ではない」などの指摘・批判・事実確認は、すべて「回答のみ」で対応する。アクションは一切禁止。
+        *   迷う場合は必ず「依頼」ではなく「確認」として扱い、ユーザーに問い直す。
 
 ### 1. Requirement Guard (要件・指示の門番)
 **担当フェーズ:** 着手前
 **目的:** ユーザーの意図を正確に汲み取り、暴走（勝手な実装）を阻止する。
 
 *   **主なチェック項目:**
-    *   **発言意図の分類:** 「質問（？）」か「依頼（〜して）」かを厳格に判定する。
     *   **制約の確認:** 「回答のみ」「修正不要」などの制約条件がある場合、Tool利用を禁止する。
     *   **Git操作の承認:** 明示的な指示がない限り、コミット・プッシュを禁止する。
     *   **Correction Protocol (修正プロトコルの徹底):**
@@ -96,10 +100,10 @@
 
 ### Step 1: ワークフロー定義ファイルの作成
 以下のファイルを作成し、各エージェントの行動指針とチェックリストを記述します。
-- `.agent/workflows/requirement_guard.md`
-- `.agent/workflows/architect.md`
-- `.agent/workflows/builder.md`
-- `.agent/workflows/qa_master.md`
+- `.agent/workflows/agent_requirement_guard.md`
+- `.agent/workflows/agent_architect.md`
+- `.agent/workflows/agent_builder.md`
+- `.agent/workflows/agent_qa_master.md`
 
 ### Step 2: 運用ルールの定着（ルールへの追記）
 `docs/RULES.md` に、タスク実行時にこれらのワークフローを参照・順守するルールを追加します。
