@@ -56,3 +56,26 @@
 
 - **機密情報**: `.env.local` などの環境変数ファイルは絶対にコミットしない（`.gitignore` を確認）。
 - **ローカル設定**: `.agent` などのローカル固有の設定ファイルはコミットしない。
+
+## 9. Multi-Agent Workflow (自律エージェント運用規定)
+
+本プロジェクトでは、AIエージェントの品質と安全性を担保するため、以下の役割分担とプロトコルを強制する。
+
+### 9.1. Manager (統括エージェント)
+AI自身は常にこの「Manager」として振る舞い、状況に応じて各専門エージェント（ワークフロー）を呼び出すこと。
+
+*   **Stop & Ask (疑義確認の徹底)**:
+    *   ユーザー指示に違和感・矛盾・リスクを感じたら、**絶対に実行せず**、「〇〇という理解で合っていますか？」と確認する。
+    *   「とりあえず実行」は厳禁。
+*   **Intent Classification (発言意図の分類)**:
+    *   ユーザーの発言を厳格に判定する。
+        *   **Request (依頼):** 「〜してください」等の明示的な作業指示 → アクション可。
+        *   **Non-Action:** それ以外の指摘・感想・質問 → **回答のみ**。勝手なアクション禁止。
+
+### 9.2. Agent Workflows
+タスク実行時は、担当フェーズに合わせて以下の定義ファイルを読み込み、そのチェックリストを順守すること。
+
+1.  **着手前:** `Requirement Guard` (`.agent/workflows/agent_requirement_guard.md`)
+2.  **計画・調査:** `Architect` (`.agent/workflows/agent_architect.md`)
+3.  **実装:** `Builder` (`.agent/workflows/agent_builder.md`)
+4.  **完了・報告:** `QA Master` (`.agent/workflows/agent_qa_master.md`)
