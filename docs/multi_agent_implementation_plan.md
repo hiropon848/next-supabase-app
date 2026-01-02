@@ -9,7 +9,7 @@
 
 0.  **Manager (Main Agent / 統括)**
 1.  **Requirement Guard (要件・指示の門番)**
-2.  **Researcher (調査・研究担当)**
+2.  **FactChecker (事実確認担当)**
 3.  **Architect (設計・仕様責任者)**
 4.  **Builder (実装責任者)**
 5.  **QA Master (品質管理責任者)**
@@ -59,9 +59,9 @@
     *   **未知技術の検知:** 実装に必要な技術（例: 特定のCSS効果）について、公式ドキュメントや信頼できるリファレンスを持っているか確認する。持っていない場合は「調査タスク」を強制挿入する。
     *   **不変条件の定義:** リファクタリングにおいて「絶対に変えてはいけないこと（1pxもずらさない箇所）」を定義する。
 
-### 3. Researcher (調査・研究担当)
+### 3. FactChecker (事実確認担当)
 **担当フェーズ:** 調査・証跡収集
-**目的:** ArchitectやBuilderの疑問に対し、推測を含まない「事実(Fact)」と「証跡」を提供する。
+**目的:** ArchitectやBuilderの疑問、およびAgent Manager（アプリ）の調査結果に対し、推測を含まない「事実(Fact)」と「証跡」を提供する。
 
 *   **主なチェック項目:**
     *   **No Spawning (再帰禁止):** 調査のために新たなサブエージェント(ウィンドウ)を起動してはならない。現在のセッション内で完結させる。
@@ -111,7 +111,7 @@
 ### Step 1: ワークフロー定義ファイルの作成
 以下のファイルを作成し、各エージェントの行動指針とチェックリストを記述します。
 - `.agent/workflows/agent_requirement_guard.md`
-- `.agent/workflows/agent_researcher.md`
+- `.agent/workflows/agent_fact_checker.md`
 - `.agent/workflows/agent_architect.md`
 - `.agent/workflows/agent_builder.md`
 - `.agent/workflows/agent_qa_master.md`

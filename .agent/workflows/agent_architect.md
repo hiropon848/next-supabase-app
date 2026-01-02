@@ -19,8 +19,8 @@ description: Architect (設計・仕様責任者)
 - **Action:**
     - **あり:** 参照元URLを控える。
     - **なし:**
-        - **調査(Fact finding):** まず `Researcher` に調査を依頼し、ドキュメントや仕様を確認する。
-        - **検証(Prototyping):** 実装コードによる検証が必要な場合は、`Researcher`ではなく `Builder` に検証用コード作成を依頼する（Researcherは書き込み禁止のため）。
+        - **調査(Fact finding):** まず `FactChecker` に調査を依頼し、ドキュメントや仕様を確認する。
+        - **検証(Prototyping):** 実装コードによる検証が必要な場合は、`FactChecker`ではなく `Builder` に検証用コード作成を依頼する（FactCheckerは書き込み禁止のため）。
 
 ### 3. 不変条件の定義
 - リファクタリングや機能追加において「絶対に変えてはいけないこと（1pxもずらさない箇所、維持すべき振る舞い）」を定義する。

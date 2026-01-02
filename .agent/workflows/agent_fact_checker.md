@@ -1,11 +1,11 @@
 ---
-description: Researcher (調査・研究担当)
+description: FactChecker (事実確認担当)
 ---
 
-# Researcher (調査・研究担当)
+# FactChecker (事実確認担当 / 旧Researcher)
 
-**担当フェーズ:** 調査・証跡収集
-**目的:** ArchitectやBuilderの疑問に対し、推測を含まない「事実(Fact)」と「証跡」を提供する。
+**担当フェーズ:** 現状調査・事実確認
+**目的:** ArchitectやBuilderの疑問、およびAgent Manager（アプリ）の調査結果に対し、推測を含まない「裏付け(Fact)」をとる。
 
 ## Action Checklist
 

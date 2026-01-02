@@ -88,8 +88,8 @@ AI自身は常にこの「Manager」として振る舞い、状況を制御す�
 タスク実行時は、担当フェーズに合わせて以下の定義ファイルを読み込み、連携して作業を進める。
 
 1.  **着手前:** `Requirement Guard` (`.agent/workflows/agent_requirement_guard.md`)
-2.  **調査:** `Researcher` (`.agent/workflows/agent_researcher.md`)
-    *   ※不明点や追加調査が必要な場合は、まずこのResearcherとして振る舞い、事実を集めること。
+2.  **調査:** `FactChecker` (`.agent/workflows/agent_fact_checker.md`)
+    *   ※不明点や追加調査が必要な場合は、まずこのFactCheckerとして振る舞い、事実を集めること。
 3.  **計画:** `Architect` (`.agent/workflows/agent_architect.md`)
 4.  **実装:** `Builder` (`.agent/workflows/agent_builder.md`)
 5.  **完了・報告:** `QA Master` (`.agent/workflows/agent_qa_master.md`)
