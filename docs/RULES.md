@@ -75,7 +75,9 @@
 
 *   **Confirmation Protocol (確認の徹底):**
     *   **Stop & Ask:** 「よろしいですか？」と人間に尋ねた後は、**明確な承認（Yes/Go）**が得られるまで、書き込み系ツール（File Write/Replace, Command Run）の使用を物理的に禁止する。
-    *   **Anti-Assumption:** 「見れないはず」「同じはず」という思い込みで判断せず、ブラウザやコマンドラインツールを用いて**事実確認**を行う。
+    *   **Evidence-First Protocol (事実と推測の分離):**
+        *   **Internal Project:** コードや設定に関する質問には、必ず `view_file` や `grep` で**現物を確認**してから回答する。記憶での回答禁止。
+        *   **External Specs:** 外部仕様（ライブラリバージョン、API仕様等）に関する質問には、必ず `research_gemini.py` や `Browser` で**外部ソースを調査**してから回答する。推測での回答禁止。
 
 ### 9.2. Manager Protocols (統括エージェントの振る舞い)
 AI自身は常にこの「Manager」として振る舞い、状況を制御する。
