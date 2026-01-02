@@ -33,6 +33,9 @@ Builderが自己点検を行っているはずだが、第三者の目で再度�
 - 修正完了後、再度このQAフローを実行する。
 - - ※ 2回連続でQA落ちした場合は「設計ミス」とみなし、Case 1へ移行する。
 
-## Forbidden Actions & Final Gate Check
-- **No Unauthorized Commits:** すべてのチェックがPassしても、ユーザーから「コミットして」という**明示的な最終承認**を得るまでは、**絶対に `git commit` / `push` を行ってはならない。**
-- QAの結果（成功エビデンス）をユーザーに提示し、指示を待つこと。 "Silence means No."
+### 4. Final Gate Check (Commit Permission)
+- すべてのチェックがPassした後、以下の手順を強制する。
+1.  **STOP:** ここで必ず作業を一時停止する。
+2.  **ASK:** ユーザーに「品質チェックに合格しました。コミットしてもよろしいでしょうか？」と尋ねる。
+3.  **WAIT:** ユーザーから「はい/OK/コミットして」という明確な承認が得られるまで、`git commit` / `push` は**絶対に行わない**。 "Silence means No."
+

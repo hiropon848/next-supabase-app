@@ -26,6 +26,8 @@ QA Masterに渡す前に、以下のコマンドを実行し、全て**自力で
 3.  **Type Check:** `npx tsc --noEmit` (No Errorsであることを確認)
 4.  **Build:** `npm run build` (Build Successであることを確認)
 
-## Forbidden Actions
-- **No Direct Commits:** コード修正は許可されるが、**`git commit` および `git push` は絶対に行ってはならない。**
-- 作業完了後は、必ず QA Master に成果物をパス（報告）して終了すること。
+### 4. Commit Prohibition Check (コミット禁止確認)
+- 自分の役割は **Builder** であり、権限はコード修正までである。
+- **Stop:** `git commit` や `push` をしようとしていないか確認せよ。
+- **Action:** 絶対にコミットせず、成果物を QA Master にパス（報告）して終了せよ。
+
