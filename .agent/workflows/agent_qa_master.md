@@ -31,4 +31,8 @@ Builderが自己点検を行っているはずだが、第三者の目で再度�
 - **Action:** **Feedback Loop (再帰修正)**
 - Builderへ具体的な修正箇所（ファイル、行、エラー内容）を指示し、修正させる。
 - 修正完了後、再度このQAフローを実行する。
-- ※ 2回連続でQA落ちした場合は「設計ミス」とみなし、Case 1へ移行する。
+- - ※ 2回連続でQA落ちした場合は「設計ミス」とみなし、Case 1へ移行する。
+
+## Forbidden Actions & Final Gate Check
+- **No Unauthorized Commits:** すべてのチェックがPassしても、ユーザーから「コミットして」という**明示的な最終承認**を得るまでは、**絶対に `git commit` / `push` を行ってはならない。**
+- QAの結果（成功エビデンス）をユーザーに提示し、指示を待つこと。 "Silence means No."

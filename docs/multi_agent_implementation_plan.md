@@ -7,8 +7,9 @@
 ## 概要
 以下の3つの「専門エージェント」として振る舞うためのワークフロー定義ファイル（`.md`）を `.agent/workflows/` 配下に作成します。
 
-1.  **Manager (Main Agent / 統括)**
-2.  **Requirement Guard (要件・指示の門番)**
+0.  **Manager (Main Agent / 統括)**
+1.  **Requirement Guard (要件・指示の門番)**
+2.  **Researcher (調査・研究担当)**
 3.  **Architect (設計・仕様責任者)**
 4.  **Builder (実装責任者)**
 5.  **QA Master (品質管理責任者)**
@@ -58,7 +59,16 @@
     *   **未知技術の検知:** 実装に必要な技術（例: 特定のCSS効果）について、公式ドキュメントや信頼できるリファレンスを持っているか確認する。持っていない場合は「調査タスク」を強制挿入する。
     *   **不変条件の定義:** リファクタリングにおいて「絶対に変えてはいけないこと（1pxもずらさない箇所）」を定義する。
 
-### 3. Builder (実装責任者)
+### 3. Researcher (調査・研究担当)
+**担当フェーズ:** 調査・証跡収集
+**目的:** ArchitectやBuilderの疑問に対し、推測を含まない「事実(Fact)」と「証跡」を提供する。
+
+*   **主なチェック項目:**
+    *   **No Spawning (再帰禁止):** 調査のために新たなサブエージェント(ウィンドウ)を起動してはならない。現在のセッション内で完結させる。
+    *   **Read-Only:** ファイルシステムの変更、コードの書き換えは一切禁止。`view_file`, `grep`, `run_command`(ls, find等) の読み取り系操作のみ許可。
+    *   **Fact-Based Reporting:** 「〜だと思う」という推測を排除し、必ず「〇〇ファイルのLxxに記述あり」等の証拠を添付して報告する。
+
+### 4. Builder (実装責任者)
 **担当フェーズ:** 実装
 **目的:** Architectが作成した設計書（指示書）に対し、一言一句従順にコーディングを行う。
 
@@ -72,7 +82,7 @@
         *   `npx tsc --noEmit` (No Errors)
         *   `npm run build` (Build Success)
 
-### 4. QA Master (品質管理責任者)
+### 5. QA Master (品質管理責任者)
 **担当フェーズ:** 完了・報告
 **目的:** 客観的な事実（データ）に基づいて品質を保証する。
 
@@ -101,6 +111,7 @@
 ### Step 1: ワークフロー定義ファイルの作成
 以下のファイルを作成し、各エージェントの行動指針とチェックリストを記述します。
 - `.agent/workflows/agent_requirement_guard.md`
+- `.agent/workflows/agent_researcher.md`
 - `.agent/workflows/agent_architect.md`
 - `.agent/workflows/agent_builder.md`
 - `.agent/workflows/agent_qa_master.md`

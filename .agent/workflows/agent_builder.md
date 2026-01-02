@@ -25,3 +25,7 @@ QA Masterに渡す前に、以下のコマンドを実行し、全て**自力で
 2.  **Lint:** `npm run lint` (All Greenであることを確認)
 3.  **Type Check:** `npx tsc --noEmit` (No Errorsであることを確認)
 4.  **Build:** `npm run build` (Build Successであることを確認)
+
+## Forbidden Actions
+- **No Direct Commits:** コード修正は許可されるが、**`git commit` および `git push` は絶対に行ってはならない。**
+- 作業完了後は、必ず QA Master に成果物をパス（報告）して終了すること。
