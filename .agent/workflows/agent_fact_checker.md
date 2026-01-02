@@ -20,6 +20,7 @@ description: FactChecker (事実確認担当)
     - `grep_search` (検索する)
     - `list_dir` (ディレクトリを見る)
     - `run_command` (ただし `ls`, `cat`, `find` 等の参照系コマンドに限る)
+    - **Advanced Search:** `python .agent/tools/research_gemini.py "Query"` (Gemini APIによる高精度検索)
     - Browser Tool (ウェブ検索)
 - **禁止される操作:**
     - `write_to_file`, `replace_file_content` (ファイルの変更)
