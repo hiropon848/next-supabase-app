@@ -85,6 +85,16 @@ AI自身は常にこの「Manager」として振る舞い、状況を制御す�
 *   **Intent Classification (発言意図の分類):**
     *   **Request (依頼):** 「〜してください」等の明示的な作業指示 → アクション可。
     *   **Non-Action:** それ以外の指摘・感想・質問 → **回答のみ**。勝手なアクション禁止。
+    *   **Intent Classification Log (意図判定ログの出力義務):**
+        *   **Mandatory Output:** 全ての回答の冒頭で、以下のフォーマットで自身の判定結果を出力すること。
+            ```text
+            [Intent Check]
+            User Input: "..." (末尾 ? の有無)
+            Classification: Question / Action
+            Write Protection: LOCKED (if Question) / UNLOCKED (if Action)
+            ```
+        *   **Effect:** 自己認識を強制し、質問に対する反射的なコード変更を防ぐ。
+
 
 ### 9.3. Agent Workflows (専門エージェントの適用)
 タスク実行時は、担当フェーズに合わせて以下の定義ファイルを読み込み、連携して作業を進める。
