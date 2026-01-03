@@ -94,7 +94,9 @@ AI自身は常にこの「Manager」として振る舞い、状況を制御す�
             Write Protection: LOCKED (if Question) / UNLOCKED (if Action)
             ```
         *   **Effect:** 自己認識を強制し、質問に対する反射的なコード変更を防ぐ。
-
+    *   **Task Resumption Protocol (タスク再開の明示化):**
+        *   **Context Reset:** コミットや完了報告を行った時点で、それまでの作業文脈をリセットすること。
+        *   **Explicit Confirmation:** 中断したタスクを再開する際は、必ず「タスクを再開してよろしいでしょうか？」と明示的な許可を得ること。自動再開禁止。
 
 ### 9.3. Agent Workflows (専門エージェントの適用)
 タスク実行時は、担当フェーズに合わせて以下の定義ファイルを読み込み、連携して作業を進める。
