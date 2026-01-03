@@ -31,13 +31,12 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
     ref
   ) => {
     const [showPassword, setShowPassword] = useState(false);
-    const [isFocused, setIsFocused] = useState(false);
 
     const isPassword = type === 'password';
     const inputType = isPassword ? (showPassword ? 'text' : 'password') : type;
 
     return (
-      <div className={cn("group space-y-2", className)}>
+      <div className={cn('group space-y-2', className)}>
         <label
           htmlFor={id}
           className="block text-xs font-semibold text-white/60"
@@ -54,8 +53,8 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
             onChange={(e) => onChange(e.target.value)}
             onBlur={onBlur}
             className={cn(
-              'h-11 w-full rounded-lg border bg-white/[0.15] px-4 text-base text-white placeholder:text-white/60 backdrop-blur-[4px] focus:border-white/60 focus:bg-white/[0.25] focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0',
-              error ? 'border-neon-red' : 'border-white/30',
+              'h-11 w-full rounded-lg border bg-white/[0.15] px-4 text-base text-white backdrop-blur-[4px] placeholder:text-white/60 focus:border-white/60 focus:bg-white/[0.25] focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0',
+              error ? 'border-neon-red' : 'border-white/30'
             )}
             {...props}
           />
@@ -76,7 +75,7 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
         </div>
 
         {error && (
-          <p className="animate-in fade-in slide-in-from-top-1 duration-200 overflow-hidden text-xs font-medium text-neon-red drop-shadow-[0_0_4px_rgba(0,0,0,0.8)]">
+          <p className="overflow-hidden text-xs font-medium text-neon-red drop-shadow-[0_0_4px_rgba(0,0,0,0.8)] duration-200 animate-in fade-in slide-in-from-top-1">
             {error}
           </p>
         )}

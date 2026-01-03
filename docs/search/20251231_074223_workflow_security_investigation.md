@@ -25,17 +25,22 @@ source .agent/config.env && ./myscript.sh
 **検証結果: エージェントの履歴（ログ）には残らないが、OSレベルでは一時的に見える可能性があります。**
 
 ### A. エージェントのログ・Artifact（安全）
+
 ワークフロー定義ファイルに `$API_KEY` と記述し、それを `source` した環境変数で解決する場合：
+
 - **入力ログ**: `curl -H "Auth: $API_KEY" ...` という**文字列（変数名のまま）**が記録されます。**平文のキーは記録されません。**
 - **出力ログ**: コマンド自体がキーを標準出力（stdout）に表示しない限り、記録されません。
 
 ### B. OSのプロセスリスト（注意）
+
 コマンド実行の一瞬ですが、`ps` コマンド等でプロセスを見た際、引数が展開された状態で表示されるリスクがあります。
+
 - **危険**: `curl -H "Auth: freee_12345..." https://api.example.com` （引数で渡す）
 - **安全**: 環境変数から直接読み込むアプリケーションを実行する、または標準入力から渡す。
 
 **推奨される記述方法**:
 変数を引数として展開せず、**環境変数として渡す**形にします。
+
 ```bash
 # 良い例（変数はサブプロセスに環境変数として渡るのみ）
 source .agent/config.env && DURATION=30 ./run_batch_process.sh
@@ -44,6 +49,7 @@ source .agent/config.env && DURATION=30 ./run_batch_process.sh
 # エージェントログには "$KEY" と残るため、あとで見返しても安全。
 source .agent/config.env && curl -H "Authorization: Bearer $API_KEY" https://...
 ```
+
 ※ `echo $API_KEY` のようなデバッグコマンドは絶対に残さないでください。
 
 ## 3. 記述の簡略化（DRY）
@@ -51,9 +57,11 @@ source .agent/config.env && curl -H "Authorization: Bearer $API_KEY" https://...
 毎回 `source ...` を書く冗長さを回避するためのテクニックを提案します。
 
 ### A. ヘルパースクリプトの利用（推奨）
+
 プロジェクト固有のラッパースクリプトを作成し、そこで設定読み込みを共通化します。
 
 **1. ラッパー作成 (`.agent/run.sh`):**
+
 ```bash
 #!/bin/bash
 # 設定を読み込む
@@ -61,11 +69,14 @@ source .agent/config.env && curl -H "Authorization: Bearer $API_KEY" https://...
 # 引数のコマンドを実行
 exec "$@"
 ```
+
 `chmod +x .agent/run.sh` しておきます。
 
 **2. ワークフロー定義:**
+
 ```markdown
 # 記述が短く、意図も明確になる
+
 .agent/run.sh curl https://api.example.com/endpoint
 .agent/run.sh ./scripts/deploy.sh
 ```

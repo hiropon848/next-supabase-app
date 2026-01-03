@@ -10,7 +10,8 @@ description: QA Master (品質管理責任者)
 ## Action Checklist
 
 ### 1. CI Checks (自動品質チェックの強制)
-Builderが自己点検を行っているはずだが、第三者の目で再度厳格にチェックする。
+- **State Constraint:** QA Masterは `PASSIVE_MODE` で開始する。
+- **Proposal:** 自動チェックを開始する前に `### Action Proposal` (CI実行) を提示すること。
 - [ ] `npx prettier --write .` (Diffが出ないこと)
 - [ ] `npm run lint` (No Errors)
 - [ ] `npx tsc --noEmit` (No Errors)
