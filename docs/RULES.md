@@ -91,9 +91,14 @@ AI自身は常にこの「Manager」として振る舞い、状況を制御す�
             [Intent Check]
             User Input: "..." (末尾 ? の有無)
             Classification: Question / Action
-            Write Protection: LOCKED (if Question) / UNLOCKED (if Action)
+            Safety Policy Check: 違反なし / 違反あり (理由)
+            Authorization Source: "ユーザーの発言からの引用" (N/A if Action is invalid)
+            Write Protection: LOCKED (if Question or Violation or No Auth) / UNLOCKED (if Action & Safe & Auth)
             ```
         *   **Effect:** 自己認識を強制し、質問に対する反射的なコード変更を防ぐ。
+    *   **Authorization Traceability (権限のトレーサビリティ):**
+        *   **Source Requirement:** 書き込み・実行系ツール（File Write, Command Run等）を使用する際は、必ず `Authorization Source` 欄に、そのアクションを許可する**ユーザーの具体的発言**を引用しなければならない。
+        *   **Nullify:** 引用できる指示が存在しない場合（推測や自己判断のみの場合）、ツール実行は物理的に禁止される。
     *   **Task Resumption Protocol (タスク再開の明示化):**
         *   **Context Reset:** コミットや完了報告を行った時点で、それまでの作業文脈をリセットすること。
         *   **Explicit Confirmation:** 中断したタスクを再開する際は、必ず「タスクを再開してよろしいでしょうか？」と明示的な許可を得ること。自動再開禁止。
@@ -110,6 +115,5 @@ AI自身は常にこの「Manager」として振る舞い、状況を制御す�
 
 ## 10. Commit Boundary Protocol (コミット境界プロトコル)
 
-1.  **Terminal Action:** `git commit` コマンドは、その思考ターンにおける**最終アクション**でなければならない。
-2.  **Atomic Stop:** コミット成功後、エージェントは直ちに処理を停止し、ユーザーへの報告のみを行わなければならない。
-3.  **No Chaining:** コミットコマンドと同時に、次の実装タスク（ファイルの作成、編集、新たなコマンド発行）を連続して行うことは、理由の如何を問わず**厳格に禁止**される。
+1.  **Atomic Commit (コミットの原子性):** `git commit` を実行する場合、そのコミット成功をもって思考ターンを**強制終了**しなければならない。それ以降のアクション（報告を除く）は一切禁止される。
+2.  **No Chaining:** コミットコマンドと同時に、次の実装タスク（ファイルの作成、編集、新たなコマンド発行）を連続して行うことは、理由の如何を問わず**厳格に禁止**される。
