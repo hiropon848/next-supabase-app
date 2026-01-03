@@ -36,9 +36,9 @@ Supabase SSRパッケージ (`@supabase/ssr`) を使用し、Cookieベースの�
 UI実装を先行させるため、依存関係にあるバックエンドファイルの「型定義」と「空関数」のみを先に作成します。
 これにより、UI構築時のビルドエラーを防ぎます。
 
-- [ ] **Create Actions Skeleton**: `src/app/auth/actions.ts` を作成し、空の `login`, `signup`, `logout` 関数をexportする。
-- [ ] **Create Client Skeleton**: `src/lib/supabase/server.ts` を作成し、空の `createServerClient` をexportする。
-- [ ] **Objective**: 実装の中身は空で良い。UI側からimportしてもエラーにならない状態を作ることが目的。
+- [x] **Create Actions Skeleton**: `src/app/auth/actions.ts` を作成し、空の `login`, `signup`, `logout` 関数をexportする。
+- [x] **Create Client Skeleton**: `src/lib/supabase/server.ts` を作成し、空の `createServerClient` をexportする。
+- [x] **Objective**: 実装の中身は空で良い。UI側からimportしてもエラーにならない状態を作ることが目的。
 
 ### Phase 2: UI Integration (Shared Layout)
 

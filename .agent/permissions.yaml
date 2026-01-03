@@ -1,27 +1,27 @@
 terminal:
   policy: auto # auto | always | never
-  
+
   # 自動実行を許可する安全なコマンド一覧
   allow:
-    - "ls -la"
-    - "ls -R"
-    - "pwd"
-    - "cat *"
-    - "grep *"
-    - "git status"
-    - "git log *"
-    - "git diff *"
-    - "git show *"
-    - "npm run lint"
-    - "npm run type-check"
-    - "npm run build"
-    - "npm install"
-    - "npx prettier *"
-    
+    - 'ls -la'
+    - 'ls -R'
+    - 'pwd'
+    - 'cat *'
+    - 'grep *'
+    - 'git status'
+    - 'git log *'
+    - 'git diff *'
+    - 'git show *'
+    - 'npm run lint'
+    - 'npm run type-check'
+    - 'npm run build'
+    - 'npm install'
+    - 'npx prettier *'
+
   # 明示的にブロックする危険なコマンド
   deny:
-    - "rm -rf /"
-    - "git push --force"
-    - "git push origin main"
+    - 'rm -rf /'
+    - 'git push --force'
+    - 'git push origin main'
 
   # ここに記載のないコマンド（git commit 等）はシステムが自動的にユーザー承認ダイアログを表示します。
