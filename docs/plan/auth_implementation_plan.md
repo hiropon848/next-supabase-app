@@ -5,9 +5,24 @@ Supabase SSRパッケージ (`@supabase/ssr`) を使用し、Cookieベースの�
 サーバーアクション (Server Actions) を活用し、クライアントサイドJSを最小限に抑えます。
 ユーザー体験（UI/UX）の検証を優先するため、バックエンドの仮実装（スケルトン）→UI実装→ロジック実装の順に進めます。
 
-## User Review Required
-> [!IMPORTANT]
-> **環境変数の確認:** `.env.local` に `NEXT_PUBLIC_SUPABASE_URL` と `NEXT_PUBLIC_SUPABASE_ANON_KEY` が正しく設定されていることを確認してください。
+## User Prerequisites (User Tasks)
+実装を開始する前に、以下のタスクをユーザー様ご自身で完了させる必要があります。
+
+### 1. Supabase Project Setup
+- [x] **Create Project**: Supabaseダッシュボードで新規プロジェクトを作成する。
+- [x] **Get Keys**: Project Settings > API から `Project URL` と `anon public key` を取得する。
+
+### 2. Environment Variables
+- [x] **Create .env.local**: プロジェクトルートに `.env.local` を作成し、以下を設定する。
+  ```bash
+  NEXT_PUBLIC_SUPABASE_URL=your-project-url
+  NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+  ```
+
+### 3. Dashboard Configuration
+- [x] **Auth Providers**: Authentication > Providers で `Email` が有効であることを確認。
+- [x] **Site URL**: Authentication > URL Configuration > Site URL を `http://localhost:3000` に設定。
+- [x] **Redirect URLs**: 同画面で `http://localhost:3000/auth/callback` を追加。
 
 ## Implementation Phases
 
