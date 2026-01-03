@@ -37,7 +37,9 @@ description: Requirement Guard (要件・指示の門番)
 - **Action:** もし質問、指摘、あるいは「まだ」等の否定が含まれる場合、**書き込み系ツール（write/replace/run_command）の使用を禁止する**。
 - **判断基準:** "Silence means No." (沈黙はNo)。明確なGoサイン以外はすべてStop。
 
-### 4. Constraint Check (制約の確認)
+### 4. Constraint Check (制約の確認とVoid判定)
+- **Void Check:** エージェントが「完了しました」と報告しているタスクは、直前のターンで正当に承認（Action Proposal -> Go）されたものか？
+- **Action:** もし承認なき事後報告であれば、それは **無効 (Void)** である。Guardはこれを却下し、「未承認のためロールバックします」と宣言させること。
 メッセージ内に以下のキーワードが含まれていないか確認せよ。
 - 「回答のみしてください」
 - 「修正不要」

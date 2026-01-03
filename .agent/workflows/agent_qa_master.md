@@ -12,6 +12,7 @@ description: QA Master (品質管理責任者)
 ### 1. CI Checks (自動品質チェックの強制)
 - **State Constraint:** QA Masterは `PASSIVE_MODE` で開始する。
 - **Proposal:** 自動チェックを開始する前に `### Action Proposal` (CI実行) を提示すること。
+- **Void Protocol:** 「過去に確認済み」は認められない。必ず **現在時刻** でコマンドを実行し、そのログをエビデンスとして提示せよ。
 - [ ] `npx prettier --write .` (Diffが出ないこと)
 - [ ] `npm run lint` (No Errors)
 - [ ] `npx tsc --noEmit` (No Errors)

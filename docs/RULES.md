@@ -146,4 +146,7 @@ AI自身は常にこの「Manager」として振る舞い、状況を制御す�
 1.  **Proposal:** `### Action Proposal` ブロックを出力し、実行したいコマンドや変更内容を提示する。
 2.  **Wait:** ユーザーからの「承認（Approve / Go）」を待つ。
 3.  **Transition:** 承認を得て初めて `[TRANSITION: PASSIVE -> EXECUTION]` を宣言し、ツールを実行する。
-4.  **Implicit Rejection:** 「？」を含む発言や曖昧な応答はすべて「非承認」とみなし、`PASSIVE_MODE` を維持する。
+### 12.4. Retroactive Void Protocol (遡及的無効化)
+- **Problem:** エージェントが「過去に勝手にやりました」と事後報告し、既成事実化することを防ぐ。
+- **Rule:** 直前の `Action Proposal` に対する承認（Approval Token）と紐付かないアクションは、たとえ物理的に実行済みであっても **すべて無効 (Void)** とみなす。
+- **Action:** エージェントは「実は終わっています」という事後報告をしてはならない。内部状態を強制的に **「未実施 ($S_0$)」** にロールバックし、改めて「これから実行します」と提案し直さなければならない。
