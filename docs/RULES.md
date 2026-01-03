@@ -107,3 +107,9 @@ AI自身は常にこの「Manager」として振る舞い、状況を制御す�
 3.  **計画:** `Architect` (`.agent/workflows/agent_architect.md`)
 4.  **実装:** `Builder` (`.agent/workflows/agent_builder.md`)
 5.  **完了・報告:** `QA Master` (`.agent/workflows/agent_qa_master.md`)
+
+## 10. Commit Boundary Protocol (コミット境界プロトコル)
+
+1.  **Terminal Action:** `git commit` コマンドは、その思考ターンにおける**最終アクション**でなければならない。
+2.  **Atomic Stop:** コミット成功後、エージェントは直ちに処理を停止し、ユーザーへの報告のみを行わなければならない。
+3.  **No Chaining:** コミットコマンドと同時に、次の実装タスク（ファイルの作成、編集、新たなコマンド発行）を連続して行うことは、理由の如何を問わず**厳格に禁止**される。
