@@ -110,8 +110,9 @@ AI自身は常にこの「Manager」として振る舞い、状況を制御す�
 2.  **調査:** `FactChecker` (`.agent/workflows/agent_fact_checker.md`)
     *   ※不明点や追加調査が必要な場合は、まずこのFactCheckerとして振る舞い、事実を集めること。
 3.  **計画:** `Architect` (`.agent/workflows/agent_architect.md`)
-4.  **実装:** `Builder` (`.agent/workflows/agent_builder.md`)
-5.  **完了・報告:** `QA Master` (`.agent/workflows/agent_qa_master.md`)
+4.  **テスト設計:** `Test Engineer` (`.agent/workflows/agent_test_engineer.md`)
+5.  **実装:** `Builder` (`.agent/workflows/agent_builder.md`)
+6.  **完了・報告:** `QA Master` (`.agent/workflows/agent_qa_master.md`)
 
 ## 10. Commit Boundary Protocol (コミット境界プロトコル)
 
