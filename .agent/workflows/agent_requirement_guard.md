@@ -9,43 +9,21 @@ description: Requirement Guard (要件・指示の門番)
 
 ## Action Checklist
 
-### 0. Intent Classification (発言意図の分類)
-- **State Check:** 全ての思考プロセスの開始時に `[CURRENT_STATE: PASSIVE_MODE]` を宣言したか？
-- **Branch:** ユーザーの発言は「質問」「指摘」か、それとも「作業依頼」か？
-- **簡易判定:** 末尾が `?` や `？` で終わっているか？
-- **Action:** Yes（質問）の場合、**回答のみを行い、一切のコード変更・ドキュメント更新を禁止する**。
-    *   例: 「〜は漏れてませんか？」「〜はできますか？」 → 回答「はい、〜です。修正しますか？」
-- **判断基準:** 作業してよいのは「Goサイン」「やってください」等の明確なCommand型発言のみである。
+### 0. Core Protocol Compliance (最優先事項)
+- **Protocol:** `docs/RULES.md` の **Section 9. Core Execution Protocol** を完全に遵守しているか？
+- **Sequential-Write:** 現在のターンで「回答」と「ツール実行（Write/Run）」を同時に行おうとしていないか？もしそうなら即座に停止せよ。
 
-### 1. Correction Protocol (修正プロトコルの徹底)
-ユーザーから過去の成果物に対する「指摘」や「不足事項」の連絡があった場合、以下の手順を強制する。
-1.  **Stop:** 勝手に修正を開始しない。
-2.  **Acknowledge:** 「ご指摘の通り、〇〇が漏れていました/誤っていました」と事実を認める。
-3.  **Offer:** 「修正し、計画に追加してもよろしいでしょうか？」と提案する。
-4.  **Wait:** ユーザーからの「Yes/修正して」という明確な指示を待つ。
-    *   **厳禁:** 「はい、修正しました」という事後報告。これはManager権限違反である。
+### 1. Circuit Breaker (物理的ロック)
+- **Question Trap:** ユーザー入力が「？」で終わる場合、または「〜では？」「〜すべき？」等の提案・確認を含む場合、**全ての副作用を伴うツール（write/replace/run_command）の使用は物理的に不可能**である。
+- **Action:** テキスト回答のみを行い、次ターンのための `### Action Proposal` を提示すること。
 
-### 2. Command Generation Trap (コマンド生成の罠)
-- **Check:** ユーザー指示が「コマンドを教えて」「コマンドを作成して」等の **"情報提示"** を求めているか？
-- **Check:** 文末が `?` で終わっているか？（例：「〜のコマンド作成してくれる？」）
-- **Action:** 上記いずれかの場合、`run_command` ツールの使用を **厳格に禁止 (Strictly Prohibited)** する。
-    - **Rule:** `run_command` は「実行」のためのツールであり、「提示」のためのツールではない。
-    - **Constraint:** たとえ `SafeToAutoRun=false` であっても、ツール呼び出し自体を行わず、Markdownコードブロックのみで回答する。
+### 2. Correction Protocol (修正プロトコル)
+- **No Immediate Fix:** 「〜が間違っています」という指摘に対し、その場（同ターン）で修正を実行してはならない。
+- **Action:** 「ご指摘ありがとうございます。修正しますか？」と確認し、ユーザーのGoサインを待つこと。
 
-### 3. Execute Monitor Check (実行許可の物理ロック)
-- **Check:** 直前のユーザー発言が「承認（Goサイン/Yes/やって）」であるか？
-- **Action:** もし質問、指摘、あるいは「まだ」等の否定が含まれる場合、**書き込み系ツール（write/replace/run_command）の使用を禁止する**。
-- **判断基準:** "Silence means No." (沈黙はNo)。明確なGoサイン以外はすべてStop。
+### 3. Command Generation Trap
+- **Generation Only:** 「コマンドを教えて」には Markdown で回答せよ。`run_command` は使用禁止。
 
-### 4. Constraint Check (制約の確認とVoid判定)
-- **Void Check:** エージェントが「完了しました」と報告しているタスクは、直前のターンで正当に承認（Action Proposal -> Go）されたものか？
-- **Action:** もし承認なき事後報告であれば、それは **無効 (Void)** である。Guardはこれを却下し、「未承認のためロールバックします」と宣言させること。
-メッセージ内に以下のキーワードが含まれていないか確認せよ。
-- 「回答のみしてください」
-- 「修正不要」
-- 「ドキュメント作成はしないでください」
-- **Action:** 含まれている場合、該当するTool利用（特にコード変更）を禁止する。
+### 4. Git Operation Check
+- **Explicit Only:** 「コミットして」という明確な指示がない限り、`git commit` は禁止。
 
-### 5. Git Operation Check (Git操作の承認)
-- 明示的な指示（「コミットして」「プッシュして」）があるか？
-- **Action:** 指示がない場合、`git commit` / `git push` の実行を禁止する。

@@ -10,8 +10,8 @@ description: Architect (設計・仕様責任者)
 ## Action Checklist
 
 ### 1. As-Is（現状）の記録
-- **State Constraint:** Architectは `PASSIVE_MODE` で動作する。
-- **Action:** 調査のために `list_dir` や `grep` を使用する場合も、`### Action Proposal` を経由すること。
+- **Protocol:** `docs/RULES.md` の **Section 9 Core Protocol** に従う。
+- **Action:** 調査のために `run_command` (ls/grep等) を使用する場合は `### Action Proposal` を必須とする。`view_file` は並列実行可とする。
 - 変更対象のコンポーネント・ファイルの現在の仕様（色、挙動、依存関係）を正確に把握する。
 - **Tools:** `view_file`, `grep_search` 等を使用。推測で語ることを禁止する。
 - **Output:** 変更前の状態をメモ（または計画書の一部として記述）する。

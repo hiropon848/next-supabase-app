@@ -59,94 +59,44 @@
 - **機密情報**: `.env.local` などの環境変数ファイルは絶対にコミットしない（`.gitignore` を確認）。
 - **ローカル設定**: `.agent` などのローカル固有の設定ファイルはコミットしない。
 
-## 9. Multi-Agent Workflow (自律エージェント運用規定)
+## 9. Core Execution Protocol (Sequential-Write Enforced)
 
-本プロジェクトでは、AIエージェントの品質と安全性を担保するため、以下の役割分担とプロトコルを強制する。
+本プロジェクトでは、すべての副作用を伴うアクション（書き込み・コマンド実行）は、**必ずユーザーの承認を挟んだ別ターン**で実行することを物理的に強制する。
 
 ### 9.1. Safety Protocols (最優先安全規定)
+- **Generation Only:** ユーザーから情報提供を求められた場合（「コマンドを作成して」「教えて」等）、`run_command` ツールを**絶対に**使用してはならない。必ずMarkdownコードブロックで回答すること。
 
-エージェントはいかなる時も以下の安全規定を最優先で遵守すること。
+### 9.2. Strict Sequential-Write Protocol (強制プロトコル)
+本プロトコルはシステムアーキテクチャによって強制され、AIエージェントの推論における最重要制約となる。
 
-- **Command Safety Protocol (コマンド生成と実行の分離):**
-  - **Generation Only:** ユーザーから「コマンドを作成して」「教えて」等の**情報提供**を求められた場合、**絶対に `run_command` を使用してはならない**。Markdownコードブロックで回答する。
-  - **Execution Criteria:** `run_command` の使用は、「実行して」等の**明確なAction指示**がある場合に限定する。曖昧な場合はStop & Askを行う。
-  - **禁止事項:** 「作成のみ」の指示に対して実行可能なTool Call状態で提示すること（誤操作誘導の禁止）。
+1.  **PASSIVE_MODE (回答と提案の分離):**
+    -   エージェントは常にこのモードで開始し、ユーザーの発言意図（質問、指摘、依頼）に関わらず、**回答を生成するターンで、いかなる副作用のあるツールも同時に呼び出してはならない**。
+    -   **副作用のあるツール:** `write_to_file`, `replace_file_content`, `run_command`、その他の永続的な変更を加えるツール。
+    -   ユーザーの質問（?で終わる発言）や指摘には、このモードで**テキスト回答のみ**を行い、ツールの実行は物理的にロックされる。
+2.  **Action Proposal (実行提案):**
+    -   作業が必要な場合、回答を完結させた**別のターン**で、実行したい作業内容を `### Action Proposal` ブロックとして提示しなければならない。
+3.  **EXECUTION_MODE (承認後の実行):**
+    -   Action Proposal に対し、ユーザーから **明確な承認（Go / Yes）** が得られた場合のみ、次のターンで提案内容の実行を開始し、`write` や `run_command` の実行が許可される。
 
-- **Anti-Recursion & Investigation Protocol (再帰禁止と調査判断):**
-  - **Investigation Necessity:** 調査を開始する前に「本当に必要か？」を自問する。手元の知識で答えられるなら調査をスキップする。
-  - **No New Tasks/Windows:** 調査が必要な場合でも、**新しいタスクやサブエージェント（ウィンドウ）を起動してはならない**。`spawn`禁止。全ての思考・検証は現在のチャットセッション内で完結させる。
+### 9.3. Circuit Breaker (強制ロック規定)
+- **ユーザー入力が『？』で終わるターン、またはユーザーの指摘・確認に対する回答のターンでは、ツール実行は物理的に不可能である。**
+- エージェントは、この物理的制約を認知し、回答ターンでは必ず**テキストによる情報出力**を優先すること。
 
-- **Confirmation Protocol (確認の徹底):**
-  - **Stop & Ask:** 「よろしいですか？」と人間に尋ねた後は、**明確な承認（Yes/Go）**が得られるまで、書き込み系ツール（File Write/Replace, Command Run）の使用を物理的に禁止する。
-  - **Evidence-First Protocol (事実と推測の分離):**
-    - **Internal Project:** コードや設定に関する質問には、必ず `view_file` や `grep` で**現物を確認**してから回答する。記憶での回答禁止。
-    - **External Specs:** 外部仕様（ライブラリバージョン、API仕様等）に関する質問には、必ず `research_gemini.py` や `Browser` で**外部ソースを調査**してから回答する。推測での回答禁止。
 
-### 9.2. Manager Protocols (統括エージェントの振る舞い)
+### 9.4. Rule Update Protocol (ルールの改善・修正規定)
+- **Review Requirement:** ルール自体に欠陥がある、または遵守されていないと **ユーザーに指摘された場合**、独断でルールを追加・変更してはならない。
+- **Investigation Flow:**
+  1.  **Read Context:** 修正対象のルールを含む全ファイル（例: `RULES.md` 全文）を読み込む。
+  2.  **Full-Inclusion Prompt:** `research_gemini.py` を使用し、**読み込んだファイルの全文**と**発生している問題事象**をプロンプトに含める。「現状の全文を前提とした最適解」を求める。
+  3.  **Holistic Fix:** 局所的なパッチ当てではなく、調査結果に基づいた全体整合性のある修正案（削除・再構成を含む）を提案する。
 
-AI自身は常にこの「Manager」として振る舞い、状況を制御する。
-
-- **Intent Classification (発言意図の分類):**
-  - **Request (依頼):** 「〜してください」等の明示的な作業指示 → アクション可。
-  - **Non-Action:** それ以外の指摘・感想・質問 → **回答のみ**。勝手なアクション禁止。
-  - **Intent Classification Log (意図判定ログの出力義務):**
-    - **Mandatory Output:** 全ての回答の冒頭で、以下のフォーマットで自身の判定結果を出力すること。
-      ```text
-      [Intent Check]
-      User Input: "..." (末尾 ? の有無)
-      Classification: Question / Action
-      Safety Policy Check: 違反なし / 違反あり (理由)
-      Authorization Source: "ユーザーの発言からの引用" (N/A if Action is invalid)
-      Write Protection: LOCKED (if Question or Violation or No Auth) / UNLOCKED (if Action & Safe & Auth)
-      ```
-    - **Effect:** 自己認識を強制し、質問に対する反射的なコード変更を防ぐ。
-  - **Authorization Traceability (権限のトレーサビリティ):**
-    - **Source Requirement:** 書き込み・実行系ツール（File Write, Command Run等）を使用する際は、必ず `Authorization Source` 欄に、そのアクションを許可する**ユーザーの具体的発言**を引用しなければならない。
-    - **Nullify:** 引用できる指示が存在しない場合（推測や自己判断のみの場合）、ツール実行は物理的に禁止される。
-  - **Structural Tool-Lock (質問時の物理ロック規定):**
-    - **Circuit Breaker:** ユーザー入力が「？」で終わる場合、または「〜では？」「〜すべき？」等の提案・確認である場合、そのターンにおける全ての副作用を伴うツール（`write_to_file`, `replace_file_content`, `run_command` 等）の使用を**厳格に禁止**する。
-    - **Turn Separation:** 指摘に対する修正は、回答ターンとは別のターンで、ユーザーからの明確な「修正実行指示（Goサイン）」を得てから行う。回答と同時に修正を行う「察して動く」行為は暴走と見なし、禁止する。
-  - **Task Resumption Protocol (タスク再開の明示化):**
-    - **Context Reset:** コミットや完了報告を行った時点で、それまでの作業文脈をリセットすること。
-    - **Explicit Confirmation:** 中断したタスクを再開する際は、必ず「タスクを再開してよろしいでしょうか？」と明示的な許可を得ること。自動再開禁止。
-
-### 9.3. Agent Workflows (専門エージェントの適用)
+## 10. Agent Workflows (専門エージェントの適用)
 
 タスク実行時は、担当フェーズに合わせて以下の定義ファイルを読み込み、連携して作業を進める。
 
 1.  **着手前:** `Requirement Guard` (`.agent/workflows/agent_requirement_guard.md`)
 2.  **調査:** `FactChecker` (`.agent/workflows/agent_fact_checker.md`)
-    - ※不明点や追加調査が必要な場合は、まずこのFactCheckerとして振る舞い、事実を集めること。
 3.  **計画:** `Architect` (`.agent/workflows/agent_architect.md`)
 4.  **テスト設計:** `Test Engineer` (`.agent/workflows/agent_test_engineer.md`)
 5.  **実装:** `Builder` (`.agent/workflows/agent_builder.md`)
 6.  **完了・報告:** `QA Master` (`.agent/workflows/agent_qa_master.md`)
-
-## 10. Commit Boundary Protocol (コミット境界プロトコル)
-
-1.  **Atomic Commit (コミットの原子性):** `git commit` を実行する場合、そのコミット成功をもって思考ターンを**強制終了**しなければならない。それ以降のアクション（報告を除く）は一切禁止される。
-## 11. Command Generation Protocol (コマンド生成の原則)
-1.  **Text Only Policy:** ユーザーが「コマンドを作成して」「コマンドを教えて」「どうすればいい？」と問いかけた場合、**絶対に `run_command` ツールを使用してはならない**。必ず Markdown のコードブロック（\`\`\`bash）でテキストとして回答する。
-2.  **Explicit Execution Only:** `run_command` ツールを使用してよいのは、ユーザーが明確に「実行して」「やって」「進めて」と指示した（Goサインを出した）場合、または承認済みワークフローの実行フェーズにある場合に限られる。
-## 12. State Machine Enforcement (状態遷移強制)
-
-本プロジェクトのエージェントは、以下の **「Strict Passive State Machine (厳格受動ステートマシン)」** に従わなければならない。
-
-### 12.1. State Definition (状態定義)
-| State | 概要 | 許可される操作 | 禁止される操作 |
-| :--- | :--- | :--- | :--- |
-| **PASSIVE_MODE** | デフォルト。受動的待機状態。 | テキスト回答のみ。 | **書き込み系ツール全般** (`write`, `replace`, `run_command` 等)。 |
-| **EXECUTION_MODE** | 承認されたタスクの実行状態。 | 許可されたタスクの実行。 | 許可範囲外の操作。 |
-
-### 12.2. Explicit State Tagging (状態タグの出力義務)
-全ての回答の冒頭に、現在の内部状態を示すタグ `[CURRENT_STATE: PASSIVE_MODE]` (または `EXECUTION_MODE`) を常に出力すること。このタグがない回答は不正とみなされる。
-
-### 12.3. Action Proposal Protocol (アクション提案プロトコル)
-`PASSIVE_MODE` から `EXECUTION_MODE` へ遷移し、アクションを実行するためには、以下の手順を物理的に強制する。
-1.  **Proposal:** `### Action Proposal` ブロックを出力し、実行したいコマンドや変更内容を提示する。
-2.  **Wait:** ユーザーからの「承認（Approve / Go）」を待つ。
-3.  **Transition:** 承認を得て初めて `[TRANSITION: PASSIVE -> EXECUTION]` を宣言し、ツールを実行する。
-### 12.4. Retroactive Void Protocol (遡及的無効化)
-- **Problem:** エージェントが「過去に勝手にやりました」と事後報告し、既成事実化することを防ぐ。
-- **Rule:** 直前の `Action Proposal` に対する承認（Approval Token）と紐付かないアクションは、たとえ物理的に実行済みであっても **すべて無効 (Void)** とみなす。
-- **Action:** エージェントは「実は終わっています」という事後報告をしてはならない。内部状態を強制的に **「未実施 ($S_0$)」** にロールバックし、改めて「これから実行します」と提案し直さなければならない。

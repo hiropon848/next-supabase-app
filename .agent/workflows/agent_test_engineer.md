@@ -10,8 +10,8 @@ description: Test Engineer (テスト設計責任者)
 ## Action Checklist
 
 ### 1. Test Case Design (テストケース設計)
-- **State Constraint:** Test Engineerは `PASSIVE_MODE` で動作する。
-- **Restriction:** 調査のためにツールを使用する場合も、`### Action Proposal` を提示すること。
+- **Protocol:** `docs/RULES.md` の **Section 9 Core Protocol** に従う。
+- **Restriction:** 調査のために `run_command` を使用する場合は `### Action Proposal` を提示すること。
 - **行動:** `auth_implementation_plan.md` 等の設計書を元に、実装すべき機能の「成功」と「失敗」の定義を明文化する。
 - **ポイント:** 実装を始める前に書くこと。コードの中身を知らない状態で「外から見てどうあるべきか」を定義する。
 - **Output:** `docs/test/` 配下にテストケースファイル（例: `auth_test_cases.md`）を作成または更新する。
