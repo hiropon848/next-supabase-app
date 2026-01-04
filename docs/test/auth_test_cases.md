@@ -45,3 +45,41 @@ QA Masterは本ドキュメントに基づき、Builderの成果物を検証し�
   - `npm run build` を実行する。
 - **合格基準:**
   - エラーが出力されずにコマンドが終了すること。
+
+---
+
+## Phase 2: UI Integration (Shared Layout & Signup)
+
+### [Test Case 2-1] Shared Layout Abstraction
+- **目的:** 共通の「Glass Liquid Theme」ロジックがレイアウトコンポーネントとして分離され、再利用可能になっていること。
+- **対象ファイル:** `src/app/(auth)/layout.tsx` (新規作成)
+- **検証手順:**
+    1.  `src/app/login/page.tsx` から `<svg>` フィルタ定義が削除されていることを確認する。
+    2.  `src/app/(auth)/layout.tsx` に `<svg>` フィルタ定義が存在することを確認する。
+    3.  ブラウザで `/login` を開き、背景エフェクト（歪み・ガラス感）が崩れていないか目視確認する。
+- **合格基準:**
+    - `page.tsx` のコード量が削減されていること。
+    - `/login` の見た目が Phase 1 完了時と同じであること（回帰テスト）。
+
+### [Test Case 2-2] Signup Page UI
+- **目的:** 新規登録画面がログイン画面と同様のデザインテーマで実装されていること。
+- **対象ファイル:** `src/app/signup/page.tsx`
+- **検証手順:**
+    1.  ブラウザで `/signup` にアクセスする。
+    2.  フォーム要素（Email, Password）が存在することを確認する。
+    3.  「アカウント作成」ボタンが存在することを確認する。
+    4.  フッターに「すでにアカウントをお持ちの方はこちら（ログイン）」へのリンクがあるか確認する。
+    5.  リンクをクリックし、 `/login` に遷移できるか確認する。
+- **合格基準:**
+    - ログイン画面と同じ Glass Liquid デザインが適用されていること。
+    - 相互リンクにより `/login` <-> `/signup` 間を移動できること。
+
+### [Test Case 2-3] 静的解析パス確認
+- **目的:** 追加実装後のコードが品質基準（Format, Lint, Build）を満たしていること。
+- **検証手順:**
+  - `npx prettier --check .`
+  - `npm run lint`
+  - `npx tsc --noEmit`
+  - `npm run build`
+- **合格基準:**
+  - エラーが出力されずにコマンドが終了すること。
