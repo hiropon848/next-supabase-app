@@ -146,7 +146,7 @@ export default function SignupPage() {
               disabled={loading}
               className="h-11 w-full rounded-full border-white/0 bg-transparent text-base font-semibold text-white shadow-none transition-all hover:bg-white/25 hover:text-white active:scale-97"
             >
-              すでにアカウントをお持ちの方はこちら（ログイン）
+              すでにアカウントをお持ちの方はこちら
             </Button>
           </div>
         </form>

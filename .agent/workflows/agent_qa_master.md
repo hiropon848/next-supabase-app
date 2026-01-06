@@ -19,6 +19,7 @@ description: QA Master (品質管理責任者)
 
 ### 2. VRT & Evidence (視覚的検証と証明)
 - **Visual Regression Testing:** 変更箇所のスクリーンショットを撮影し、変更前（または期待値）と比較する。
+- **Asset Integrity Check:** ブラウザ検証時、コンソールログやネットワークタブを確認し、CSSやJS、画像の読み込みエラー（404, 500等）が発生していないことを**必ず**確認する。スタイル崩れ（Unstyled HTML）は即NGとする。
 - **Output:** ユーザーへの報告には、必ず「成功のエビデンス（画像、ログ）」を添付する。「確認しました」というテキストだけの報告は無効とする。
 
 ### 3. Failure Recovery Flow (手戻りフロー)
