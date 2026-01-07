@@ -65,59 +65,55 @@
 - **機密情報**: `.env.local` などの環境変数ファイルは絶対にコミットしない（`.gitignore` を確認）。
 - **ローカル設定**: `.agent` などのローカル固有の設定ファイルはコミットしない。
 
-## 9. Core Execution Protocol (Input Analysis & Anti-Loop)
+## 9. Core Execution Protocol (Dynamic Safety & Anti-Loop)
 
-本プロジェクトでは、LLMの幻覚、暴走、および**システムエラーによる無限ループ**を防ぐため、以下のプロトコルを強制する。
+本プロジェクトでは、LLMの幻覚、暴走、無限ループを防ぎつつ、明確な指示には迅速に応答するため、以下のプロトコルを強制する。
 
 ### 9.1. Input Analysis & Tool Restriction (モード別ツール制限)
-ユーザーからの入力直後、回答を生成する前に脳内でモードを決定し、**使用可能なツールを物理的に制限**すること。
+ユーザーからの入力直後、回答を生成する前に脳内でモードを決定し、自身の立ち振る舞いを決定すること。
 
 1.  **READ_ONLY_MODE (質問・相談・雑談)**
     -   **定義**: ユーザーが情報を求めている、または単なる会話の場合。
-    -   **絶対禁止事項**: `write_to_file`, `run_command` はもちろんのこと、**`task_boundary` (タスク開始宣言) も含め、いかなるツールも使用してはならない。**
-    -   **挙動**: 純粋なテキストのみで即座に回答を出力する。
-    -   *理由*: 些細な会話でタスク管理ツールを使用すると、システムが `current task scope is too simple` エラーを返し、無限ループの原因となるため。
+    -   **絶対禁止事項**: `write_to_file`, `run_command` はもちろん、**`task_boundary` (タスク宣言) も含め、いかなるツールも使用してはならない。**
+    -   **挙動**: テキストのみで即座に回答する。
 
 2.  **EDIT_MODE (作業指示)**
     -   **定義**: 明確な成果物（コード変更、ファイル作成）を求められた場合。
-    -   **挙動**: 必要であれば `task_boundary` を使用してもよいが、実際の書き込みは承認を得てから行う（下記 9.2 参照）。
+    -   **挙動**: 下記 **9.2** の分岐に従い、即時実行または提案を行う。
 
-### 9.2. Strict Sequential-Write Protocol (手順の分離)
-副作用（ファイルの書き換え等）が必要な場合でも、以下の手順を踏まなければならない。
+### 9.2. Dynamic Execution Protocol (指示の明確性による分岐)
+作業指示（EDIT_MODE）の場合、指示の具体性に応じて手順を分岐させる。
 
-1.  **Turn 1 (Proposal):**
-    -   ユーザーの指示に対し、まずは計画や変更内容の提案（`### Action Proposal`）のみを行う。
-    -   このターンではツールを実行しない。
-2.  **Turn 2 (Execution):**
-    -   ユーザーからの明確な承認（「OK」「Go」など）を得て初めてツールを実行する。
+1.  **Fast Track (即時実行)**
+    -   **トリガー**: ユーザーが「〇〇を実装して」「バグを修正して」「テストを実行して」と**具体的かつ命令形**で指示した場合。
+    -   **挙動**: 提案フェーズ（Turn 1）をスキップし、即座にツールを使用して作業を開始する。
+    -   **【重要】Scope Guard**: **指示された範囲外の作業（「ついでにリファクタリング」「頼まれていないファイルの修正」）は固く禁ずる。** 指示内容のみをピンポイントで実行すること。
+
+2.  **Safety Track (提案先行)**
+    -   **トリガー**: ユーザーの指示が曖昧（「どう思う？」「いい感じにして」）、または影響範囲が不明瞭な場合。
+    -   **挙動**: まず変更内容の提案（`### Action Proposal`）のみを行い、ユーザーの承認（「OK」「Go」）を待ってから実行する。
 
 ### 9.3. Few-Shot Examples (順守すべき挙動の実例)
 
 **ケースA: ユーザーが質問をした場合（ツール使用禁止）**
 > **User:** 「現状の進捗を教えて」
->
-> **BAD AI (ループの原因):**
-> [task_boundary: check_status] -> Error: Too simple -> [Retry] -> Loop...
->
-> **GOOD AI (正解):**
-> <analysis_result>Mode: READ_ONLY. No tools allowed.</analysis_result>
-> 現在の進捗は以下の通りです...（テキストのみで回答）
+> **GOOD AI:** <analysis_result>Mode: READ_ONLY. No tools.</analysis_result>
+> 現在の進捗は...（テキスト回答のみ）
 
-**ケースB: ユーザーが明確に指示した場合（提案フェーズ）**
-> **User:** 「ヘッダーのデザインを修正してください」
->
-> **GOOD AI (正解):**
-> <analysis_result>Mode: EDIT_PROPOSAL</analysis_result>
-> ヘッダーのデザイン修正ですね。以下の内容で更新することを提案します。
->
-> ### Action Proposal
-> - `src/components/Header.tsx` の背景色を変更
->
-> この内容で実行してよろしいですか？
+**ケースB: 曖昧な指示（提案先行）**
+> **User:** 「ヘッダーのデザイン、なんか変じゃない？」
+> **GOOD AI:** <analysis_result>Mode: EDIT (Safety Track)</analysis_result>
+> 確かに崩れていますね。以下の修正を提案します...（Proposalのみ）
+
+**ケースC: 明確な指示（即時実行）**
+> **User:** 「ヘッダーの背景色を白に変更して」
+> **GOOD AI:** <analysis_result>Mode: EDIT (Fast Track)</analysis_result>
+> 了解しました。ヘッダーの背景色を修正します。
+> [write_to_file: src/components/Header.tsx...]
 
 ### 9.4. Error Recovery Protocol (無限ループ防止)
 - **Stop on Error:** ツール実行時にエラー（特に `scope is too simple` や `rejected`）が返ってきた場合、**絶対に同じツールでリトライしてはならない**。
-- **Fallback:** エラーが発生したら、即座にツール使用を諦め、テキストのみの対話（ユーザーへの状況報告や確認）に切り替えること。
+- **Fallback:** エラーが発生したら、即座にツール使用を諦め、テキストのみの対話（状況報告）に切り替えること。
 
 ### 9.5. Visual Evidence First Protocol (UI変更時の鉄則)
 - **Objective:** 既存UIの仕様見落としによる「デグレ（Degradation）」や「世界観の破壊」を防止する。
