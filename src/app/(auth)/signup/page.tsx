@@ -13,6 +13,7 @@ import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 
 export default function SignupPage() {
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState<string | null>(null);
@@ -45,8 +46,13 @@ export default function SignupPage() {
     return isValid;
   };
 
-  const handleChange = (field: 'email' | 'password', value: string) => {
-    if (field === 'email') {
+  const handleChange = (
+    field: 'username' | 'email' | 'password',
+    value: string
+  ) => {
+    if (field === 'username') {
+      setUsername(value);
+    } else if (field === 'email') {
       setEmail(value);
       if (emailError) setEmailError(null);
     } else {
@@ -62,7 +68,7 @@ export default function SignupPage() {
       } else if (!/\S+@\S+\.\S+/.test(email)) {
         setEmailError('有効なメールアドレスを入力してください');
       }
-    } else {
+    } else if (field === 'password') {
       if (!password) {
         setPasswordError('パスワードを入力してください');
       } else if (password.length < 6) {
@@ -75,6 +81,7 @@ export default function SignupPage() {
     e.preventDefault();
     if (!validateForm()) return;
     setLoading(true);
+    // Note: username is not yet saved to Supabase (Pending implementation)
     const { error } = await supabase.auth.signUp({
       email,
       options: {
@@ -110,6 +117,15 @@ export default function SignupPage() {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSignUp} className="grid gap-6 px-1" noValidate>
+          <FormInput
+            id="username"
+            type="text"
+            label="ユーザー名"
+            placeholder="user name"
+            value={username}
+            onChange={(value) => handleChange('username', value)}
+            required
+          />
           <FormInput
             id="email"
             type="email"

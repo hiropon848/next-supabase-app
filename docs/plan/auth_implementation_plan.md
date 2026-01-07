@@ -42,11 +42,11 @@ UI実装を先行させるため、依存関係にあるバックエンドファ
 
 ### Phase 2: UI Integration (Shared Layout)
 
-- [ ] **Auth Layout**: `src/app/(auth)/layout.tsx` を作成。
-  - [ ] 既存の `src/app/login/layout.tsx` のGlass Liquid UIロジックをここに移動・共通化する。
-  - [ ] LoginとSignupで同じ背景エフェクトを共有させる。
-- [ ] **Refactor Login Page**: `src/app/login/page.tsx` を `src/app/(auth)/login/page.tsx` に移動・リファクタリング。
-- [ ] **Create Signup Page**: `src/app/(auth)/signup/page.tsx` を作成（Loginページのコンポーネントを再利用）。
+- [x] **Auth Layout**: `src/app/(auth)/layout.tsx` を作成。
+  - [x] 既存の `src/app/login/layout.tsx` のGlass Liquid UIロジックをここに移動・共通化する。
+  - [x] LoginとSignupで同じ背景エフェクトを共有させる。
+- [x] **Refactor Login Page**: `src/app/login/page.tsx` を `src/app/(auth)/login/page.tsx` に移動・リファクタリング。
+- [x] **Create Signup Page**: `src/app/(auth)/signup/page.tsx` を作成（Loginページのコンポーネントを再利用）。
 
 ### Phase 3: Logic Implementation
 

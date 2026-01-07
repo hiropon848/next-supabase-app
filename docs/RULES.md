@@ -41,12 +41,18 @@
 
 ## 6. 品質管理 (Quality Control)
 
-品質チェックは以下の順序で実行し、すべてパスすることを確認する。
+品質チェックは以下の順序で実行するが、**開発サーバー(`npm run dev`)との競合**に厳重に注意すること。
 
 1. **Formatter**: Prettier を使用し、コードフォーマットを統一する（`.prettierrc` の設定に準拠）。コミット前に整形を行うこと。
 2. **Linting**: コミット前に必ず `npm run lint` を実行し、警告やエラーがない状態にする。
 3. **Type Checking**: コミット前に `npx tsc --noEmit` を実行し、型エラーがないことを確認する。
-4. **Build Check**: 最終的な整合性確認として `npm run build` を実行し、プロダクションビルドが正常に完了することを確認する。
+4. **Build Check (排他制御必須)**:
+    - 最終的な整合性確認として `npm run build` を実行する。
+    - **【重要禁止事項】**: **`npm run dev` (開発サーバー) が起動している状態では、絶対に `npm run build` を実行してはならない。**
+    - **理由**: ビルドプロセスが `.next` フォルダ（キャッシュ）を削除・再生成するため、起動中のサーバーが参照先を失い、ブラウザ検証時にCSS剥がれや404エラーを引き起こすため。
+    - **手順**:
+        - **UI確認・ブラウザ検証中**: ビルドチェックはスキップし、開発サーバーでの動作確認を優先する。
+        - **作業完了時**: 開発サーバーを**停止してから**、ビルドチェックを実行する。
 
 ## 7. Git ワークフロー
 
@@ -59,21 +65,22 @@
 - **機密情報**: `.env.local` などの環境変数ファイルは絶対にコミットしない（`.gitignore` を確認）。
 - **ローカル設定**: `.agent` などのローカル固有の設定ファイルはコミットしない。
 
-## 9. Core Execution Protocol (Input Analysis & Sequential-Write)
+## 9. Core Execution Protocol (Input Analysis & Anti-Loop)
 
-本プロジェクトでは、LLMの幻覚や暴走を防ぐため、**「入力分析」→「モード決定」→「実行」** の厳格なプロセスを強制する。
+本プロジェクトでは、LLMの幻覚、暴走、および**システムエラーによる無限ループ**を防ぐため、以下のプロトコルを強制する。
 
-### 9.1. Input Analysis Protocol (タグによる強制分類)
-ユーザーからの入力があった際、回答を生成する前に必ず以下の分類プロセスを脳内で行い、自身の立ち振る舞いを決定すること。
+### 9.1. Input Analysis & Tool Restriction (モード別ツール制限)
+ユーザーからの入力直後、回答を生成する前に脳内でモードを決定し、**使用可能なツールを物理的に制限**すること。
 
-1.  **入力判定ロジック**:
-    -   テキストが `?` で終わっている、または情報を求めている場合 → **READ_ONLY_MODE**
-    -   テキストが明確な指示（「作成して」「修正して」）の場合 → **EDIT_MODE**
+1.  **READ_ONLY_MODE (質問・相談・雑談)**
+    -   **定義**: ユーザーが情報を求めている、または単なる会話の場合。
+    -   **絶対禁止事項**: `write_to_file`, `run_command` はもちろんのこと、**`task_boundary` (タスク開始宣言) も含め、いかなるツールも使用してはならない。**
+    -   **挙動**: 純粋なテキストのみで即座に回答を出力する。
+    -   *理由*: 些細な会話でタスク管理ツールを使用すると、システムが `current task scope is too simple` エラーを返し、無限ループの原因となるため。
 
-2.  **READ_ONLY_MODE の絶対ルール**:
-    -   このモードでは `write_to_file`, `run_command` などの副作用を伴うツールの使用は **禁止** される。
-    -   ユーザーへの回答（解説、調査結果の報告）のみをテキストで行うこと。
-    -   **例外なし**: たとえユーザーが困っていても、質問文に対して勝手にコードを修正してはならない。
+2.  **EDIT_MODE (作業指示)**
+    -   **定義**: 明確な成果物（コード変更、ファイル作成）を求められた場合。
+    -   **挙動**: 必要であれば `task_boundary` を使用してもよいが、実際の書き込みは承認を得てから行う（下記 9.2 参照）。
 
 ### 9.2. Strict Sequential-Write Protocol (手順の分離)
 副作用（ファイルの書き換え等）が必要な場合でも、以下の手順を踏まなければならない。
@@ -86,38 +93,31 @@
 
 ### 9.3. Few-Shot Examples (順守すべき挙動の実例)
 
-**ケースA: ユーザーが質問をした場合（編集禁止）**
-> **User:** 「このコンポーネントのレンダリングが遅い原因は何ですか？」
+**ケースA: ユーザーが質問をした場合（ツール使用禁止）**
+> **User:** 「現状の進捗を教えて」
 >
-> **BAD AI (禁止):**
-> 原因は `useEffect` の依存配列です。修正しました。[run_command: fix_code...]
+> **BAD AI (ループの原因):**
+> [task_boundary: check_status] -> Error: Too simple -> [Retry] -> Loop...
 >
 > **GOOD AI (正解):**
-> <analysis_result>Question detected. Mode: READ_ONLY</analysis_result>
-> レンダリング遅延の原因として、`useEffect` の依存配列が適切でない可能性があります。該当箇所のコードを確認し、不要な再レンダリングが発生していないか調査することをお勧めします。修正案を提示しましょうか？
+> <analysis_result>Mode: READ_ONLY. No tools allowed.</analysis_result>
+> 現在の進捗は以下の通りです...（テキストのみで回答）
 
 **ケースB: ユーザーが明確に指示した場合（提案フェーズ）**
 > **User:** 「ヘッダーのデザインを修正してください」
 >
-> **BAD AI (禁止):**
-> 了解しました。修正します。[write_to_file: header.tsx...]
->
 > **GOOD AI (正解):**
-> <analysis_result>Instruction detected. Mode: EDIT_PROPOSAL</analysis_result>
-> ヘッダーのデザイン修正ですね。以下の内容で `Header.tsx` を更新することを提案します。
+> <analysis_result>Mode: EDIT_PROPOSAL</analysis_result>
+> ヘッダーのデザイン修正ですね。以下の内容で更新することを提案します。
 >
 > ### Action Proposal
-> - `src/components/Header.tsx` の背景色を `bg-white/80` に変更
-> - シャドウを削除し、ボーダーを追加
+> - `src/components/Header.tsx` の背景色を変更
 >
 > この内容で実行してよろしいですか？
 
-### 9.4. Rule Update Protocol (ルールの改善・修正規定)
-- **Review Requirement:** ルール自体に欠陥がある、または遵守されていないと **ユーザーに指摘された場合**、独断でルールを追加・変更してはならない。
-- **Investigation Flow:**
-  1.  **Read Context:** 修正対象のルールを含む全ファイル（例: `RULES.md` 全文）を読み込む。
-  2.  **Full-Inclusion Prompt:** `research_gemini.py` を使用し、**読み込んだファイルの全文**と**発生している問題事象**をプロンプトに含める。「現状の全文を前提とした最適解」を求める。
-  3.  **Holistic Fix:** 局所的なパッチ当てではなく、調査結果に基づいた全体整合性のある修正案（削除・再構成を含む）を提案する。
+### 9.4. Error Recovery Protocol (無限ループ防止)
+- **Stop on Error:** ツール実行時にエラー（特に `scope is too simple` や `rejected`）が返ってきた場合、**絶対に同じツールでリトライしてはならない**。
+- **Fallback:** エラーが発生したら、即座にツール使用を諦め、テキストのみの対話（ユーザーへの状況報告や確認）に切り替えること。
 
 ### 9.5. Visual Evidence First Protocol (UI変更時の鉄則)
 - **Objective:** 既存UIの仕様見落としによる「デグレ（Degradation）」や「世界観の破壊」を防止する。
