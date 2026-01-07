@@ -59,9 +59,9 @@ UI実装を先行させるため、依存関係にあるバックエンドファ
 - [x] **Middleware**: `middleware.ts` でセッションのリフレッシュ処理を実装。
 
 #### 3.1 Database Schema Setup
-- [ ] **Create Profiles Table**: `public.profiles` テーブルを作成 (id, username, avatar_url, updated_at)。
-- [ ] **Create Trigger Function**: `auth.users` 作成時に自動実行される `handle_new_user` 関数を作成。
-- [ ] **Create Trigger**: `auth.users` への INSERT をトリガーにする設定。
+- [x] **Create Profiles Table**: `public.profiles` テーブルを作成 (id, username, updated_at, created_at)。
+- [x] **Create Trigger Function**: `auth.users` 作成時に自動実行される `handle_new_user` 関数を作成。
+- [x] **Create Trigger**: `auth.users` への INSERT をトリガーにする設定。
 
 #### 3.2 Remaining Logic Implementation
 - [ ] **Auth Actions**: `src/app/auth/actions.ts` を実装。
