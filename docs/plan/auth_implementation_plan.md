@@ -48,24 +48,35 @@ UI実装を先行させるため、依存関係にあるバックエンドファ
 - [x] **Refactor Login Page**: `src/app/login/page.tsx` を `src/app/(auth)/login/page.tsx` に移動・リファクタリング。
 - [x] **Create Signup Page**: `src/app/(auth)/signup/page.tsx` を作成（Loginページのコンポーネントを再利用）。
 
-### Phase 3: Logic Implementation
+### Phase 3: Database & Logic Implementation
 
-- [ ] **Supabase Server Client**: `src/lib/supabase/server.ts` にCookie制御ロジックを実装。
-- [ ] **Middleware**: `middleware.ts` でセッションのリフレッシュ処理を実装。
-- [ ] **Auth Actions**: `src/app/auth/actions.ts` に実際のアクション（`signInWithPassword`, `signUp`）を実装。
+#### 3.0 Completed Foundations
+- [x] **Data Access Layer (DAL)**: `src/data/auth.ts` を作成。
+  - Supabaseクライアントを直接操作し、DB(Auth)へのCRUDのみを担当する関数群を実装。
+- [x] **Service Layer**: `src/services/auth.ts` を作成。
+  - DALを呼び出し、バリデーションやビジネスロジック（入力整形、エラーハンドリング）を担当。
+- [x] **Supabase Server Client**: `src/lib/supabase/server.ts` にCookie制御ロジックを実装。
+- [x] **Middleware**: `middleware.ts` でセッションのリフレッシュ処理を実装。
+
+#### 3.1 Database Schema Setup
+- [ ] **Create Profiles Table**: `public.profiles` テーブルを作成 (id, username, avatar_url, updated_at)。
+- [ ] **Create Trigger Function**: `auth.users` 作成時に自動実行される `handle_new_user` 関数を作成。
+- [ ] **Create Trigger**: `auth.users` への INSERT をトリガーにする設定。
+
+#### 3.2 Remaining Logic Implementation
+- [ ] **Auth Actions**: `src/app/auth/actions.ts` を実装。
+  - Service Layerのみを呼び出す（DALやSupabaseを直接呼ばない）。
 - [ ] **Callback Route**: `src/app/auth/callback/route.ts` を作成し、PKCEフローのコード交換処理を実装。
+
 
 ### Phase 4: Verification
 
 - [ ] **Scenario Test**:
-  - [ ] 新規登録 -> ダッシュボードリダイレクト
-  - [ ] ログアウト -> ログイン画面リダイレクト
-  - [ ] 未ログインアクセス -> ログイン画面リダイレクト
-- [ ] **UI Check**:
-  - [ ] エラー時のトースト通知確認
-  - [ ] ローディング状態のボタン表示確認は `/signup` への `Link` に変更。
+  - [ ] 新規登録処理がエラーなく完了すること。
+  - [ ] **Database Check**: `auth.users` にユーザーが作成されていること。
+  - [ ] **Database Check**: `public.profiles` にユーザー名が保存されていること。
 
-#### [NEW] [src/app/(auth)/signup/page.tsx](<file:///Users/hiroakihashiba/Documents/VibeCording/next-supabase-app/src/app/(auth)/signup/page.tsx>)
+#### [NEW] [src/app/(auth)/signup/page.tsx](file:///Users/hiroakihashiba/Documents/VibeCording/next-supabase-app/src/app/(auth)/signup/page.tsx)
 
 - ログインページと同様のデザインで、サインアップ用フォームを実装。
 - Server Action `signup` を呼び出す。
@@ -95,11 +106,6 @@ UI確認完了後、中身の認証ロジックを実装します。
 
 - コールバック処理の実装。
 
-#### [MODIFY] [src/app/dashboard/page.tsx](file:///Users/hiroakihashiba/Documents/VibeCording/next-supabase-app/src/app/dashboard/page.tsx)
-
-- ログアウトボタンの実装。
-- ユーザー情報の表示確認。
-
 ## Verification Plan
 
 ### Automated Tests
@@ -108,8 +114,20 @@ UI確認完了後、中身の認証ロジックを実装します。
 
 ### Manual Verification
 
-1. **Sign Up**: 新規ユーザー登録を行い、Supabaseダッシュボードにユーザーが作成されるか確認。
-2. **Login**: 登録したユーザーでログインでき、ダッシュボードへリダイレクトされるか確認。
-3. **Session**: リロードしてもログイン状態が維持されるか確認 (Cookie)。
-4. **Middleware**: ログインなしでダッシュボードにアクセスした場合、ログインページへリダイレクトされるか確認。
-5. **Logout**: ログアウト後、ログインページへ戻り、Cookieが削除されるか確認。
+1. **Sign Up**: 新規ユーザー登録を実施。
+2. **DB Validation**: SupabaseのTable Editorにて以下の確認を行う。
+   - `auth.users`: ユーザーが作成されているか。
+   - `public.profiles`: 同じIDでレコードが作成され、`username` が保存されているか。
+
+### Phase 5: Main Screen (メイン画面) & Session Management (Next Step)
+
+#### [MODIFY] [src/app/dashboard/page.tsx](file:///Users/hiroakihashiba/Documents/VibeCording/next-supabase-app/src/app/dashboard/page.tsx)
+
+- ログアウトボタンの実装。
+- ユーザー情報の表示確認。
+
+#### Verification (Session)
+- [ ] ログイン後のメイン画面表示確認。
+- [ ] ログアウト機能の動作確認。
+
+

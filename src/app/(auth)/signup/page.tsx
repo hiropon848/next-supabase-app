@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { signup } from '@/app/auth/actions';
 import {
   CardContent,
   CardDescription,
@@ -9,7 +10,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { FormInput } from '@/components/ui/form-input';
-import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 
 export default function SignupPage() {
@@ -20,7 +20,6 @@ export default function SignupPage() {
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const supabase = createClient();
 
   const validateForm = () => {
     let isValid = true;
@@ -81,21 +80,18 @@ export default function SignupPage() {
     e.preventDefault();
     if (!validateForm()) return;
     setLoading(true);
-    // Note: username is not yet saved to Supabase (Pending implementation)
-    const { error } = await supabase.auth.signUp({
-      email,
-      options: {
-        emailRedirectTo: `${location.origin}/auth/callback`,
-      },
-      password,
-    });
 
-    if (error) {
-      alert(error.message);
+    const formData = new FormData();
+    formData.append('email', email);
+    formData.append('password', password);
+    formData.append('username', username);
+
+    const result = await signup(formData);
+
+    if (result?.error) {
+      alert(result.error);
     } else {
       alert('確認メールを送信しました。メールボックスを確認してください。');
-      // 成功したらログイン画面へ誘導してもよいが、確認待ちなのでそのままか、メッセージ表示か。
-      // ここではアラート後にログイン画面へ遷移させる。
       router.push('/login');
     }
     setLoading(false);
