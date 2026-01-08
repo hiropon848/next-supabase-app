@@ -94,9 +94,9 @@ export default function SignupPage() {
     console.log('[Debug] Server action result:', result);
 
     if (result?.error) {
-      alert(result.error);
+      alert(`エラー: ${result.error}`);
     } else {
-      alert('確認メールを送信しました。メールボックスを確認してください。');
+      //alert('確認メールを送信しました。メールボックスを確認してください。');
       router.push('/login');
     }
     setLoading(false);
