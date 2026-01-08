@@ -71,10 +71,10 @@ UI実装を先行させるため、依存関係にあるバックエンドファ
 
 ### Phase 4: Verification
 
-- [ ] **Scenario Test**:
-  - [ ] 新規登録処理がエラーなく完了すること。
-  - [ ] **Database Check**: `auth.users` にユーザーが作成されていること。
-  - [ ] **Database Check**: `public.profiles` にユーザー名が保存されていること。
+- [x] **Scenario Test**:
+  - [x] 新規登録処理がエラーなく完了すること。
+  - [x] **Database Check**: `auth.users` にユーザーが作成されていること。
+  - [x] **Database Check**: `public.profiles` にユーザー名が保存されていること。
 
 ## Verification Plan
 

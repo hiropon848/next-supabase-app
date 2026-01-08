@@ -22,6 +22,7 @@ export default function SignupPage() {
   const router = useRouter();
 
   const validateForm = () => {
+    console.log('[Debug] validateForm started');
     let isValid = true;
     setEmailError(null);
     setPasswordError(null);
@@ -42,6 +43,7 @@ export default function SignupPage() {
       isValid = false;
     }
 
+    console.log('[Debug] validateForm result:', isValid, { emailError: !email ? 'empty' : null, passwordError: !password ? 'empty' : null });
     return isValid;
   };
 
@@ -78,6 +80,7 @@ export default function SignupPage() {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('[Debug] handleSignUp started');
     if (!validateForm()) return;
     setLoading(true);
 
@@ -86,7 +89,9 @@ export default function SignupPage() {
     formData.append('password', password);
     formData.append('username', username);
 
+    console.log('[Debug] Calling signup server action');
     const result = await signup(formData);
+    console.log('[Debug] Server action result:', result);
 
     if (result?.error) {
       alert(result.error);

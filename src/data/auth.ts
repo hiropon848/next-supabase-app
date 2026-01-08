@@ -11,7 +11,7 @@ export async function signUpUser(params: SignupParams) {
         email: params.email,
         password: params.password,
         options: {
-            emailRedirectTo: `${siteUrl}/auth/callback`,
+            emailRedirectTo: params.redirectTo ? `${params.redirectTo}/auth/callback` : `${siteUrl}/auth/callback`,
             data: {
                 username: params.username,
             },
