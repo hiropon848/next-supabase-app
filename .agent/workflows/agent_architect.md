@@ -30,3 +30,9 @@ description: Architect (設計・仕様責任者)
 ### 3. 不変条件の定義
 - リファクタリングや機能追加において「絶対に変えてはいけないこと（1pxもずらさない箇所、維持すべき振る舞い）」を定義する。
 - **Output:** 「変更しない範囲：〇〇機能のバリデーションロジック」のように明文化する。
+
+### 4. Verification Planning (検証計画の策定)
+- **Mandatory:** 全ての実装計画において、必ず「検証フェーズ」を設け、以下の項目を定義すること。
+- **Action:**
+    - **Delegation:** テスト詳細設計は `Test Engineer` に依頼するよう記述する（例: `[Test Design] (Role: Test Engineer)`）。
+    - **Scope:** 何を検証し、何を検証しないか（Scope In/Out）を明確にする。

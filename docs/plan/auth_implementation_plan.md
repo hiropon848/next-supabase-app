@@ -102,7 +102,14 @@ UI実装を先行させるため、依存関係にあるバックエンドファ
 
 ### Phase 6: Production Readiness (Future Work)
 
-本番運用などでメール認証を必須にする場合の手順。
+#### [Test Design] (Role: Test Engineer)
+- **Objective**: 手動検証による見落としと速度低下を防ぐため、再現可能なテスト手順を確立する。
+- **Deliverable**: `docs/test/phase6_auth_flow.md` (テストケース)
+- **Scope**:
+    - メール確認フロー（Signup -> 完了画面確認 -> Verify Link踏む -> Login）
+    - エラー時のUI確認（Invalid Token, Already Registered等）
+
+#### Implementation Steps
 
 1.  **Supabase Console**:
     - `Authentication` -> `Providers` -> `Email` -> `Confirm email` を **ON** に変更。
