@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { revalidatePath } from 'next/cache';
 
-export default async function DashboardPage() {
+export default async function MainPage() {
   const supabase = await createClient();
 
   const {
@@ -26,7 +26,7 @@ export default async function DashboardPage() {
   return (
     <div className="min-h-screen bg-background">
       <header className="flex h-14 items-center justify-between border-b px-4 lg:px-6">
-        <h1 className="font-bold">Dashboard</h1>
+        <h1 className="font-bold">Main</h1>
         <form action={signOut}>
           <Button variant="ghost" size="sm">
             Logout

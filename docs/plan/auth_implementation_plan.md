@@ -91,7 +91,7 @@ UI実装を先行させるため、依存関係にあるバックエンドファ
 
 ### Phase 5: Main Screen (メイン画面) & Session Management (Next Step)
 
-#### [MODIFY] [src/app/dashboard/page.tsx](file:///Users/hiroakihashiba/Documents/VibeCording/next-supabase-app/src/app/dashboard/page.tsx)
+#### [MODIFY] [src/app/main/page.tsx](file:///Users/hiroakihashiba/Documents/VibeCording/next-supabase-app/src/app/main/page.tsx)
 
 - ログアウトボタンの実装。
 - ユーザー情報の表示確認。

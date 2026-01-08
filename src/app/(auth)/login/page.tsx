@@ -83,7 +83,7 @@ export default function LoginPage() {
     if (error) {
       alert(error.message);
     } else {
-      router.push('/dashboard');
+      router.push('/main');
     }
     setLoading(false);
   };
