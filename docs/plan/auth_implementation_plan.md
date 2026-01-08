@@ -99,3 +99,16 @@ UI実装を先行させるため、依存関係にあるバックエンドファ
 #### Verification (Session)
 - [ ] ログイン後のメイン画面表示確認。
 - [ ] ログアウト機能の動作確認。
+
+### Phase 6: Production Readiness (Future Work)
+
+本番運用などでメール認証を必須にする場合の手順。
+
+1.  **Supabase Console**:
+    - `Authentication` -> `Providers` -> `Email` -> `Confirm email` を **ON** に変更。
+2.  **SMTP Provider**:
+    - `Authentication` -> `Settings` -> `SMTP Settings` にて、商用SMTP（Resend, SendGrid, AWS SES等）を設定する。
+    - **注意**: デフォルトのSupabase SMTPは、開発用かつ到達率が低いため、`Invalid email` エラーの原因となる公算が高い。
+3.  **UI Update**:
+    - `src/app/(auth)/signup/page.tsx` 内の完了メッセージアラート（99行目付近）のコメントアウトを解除する。
+    - エラーハンドリング：「メール送信完了」と「実際の認証エラー」を適切に区別するUIへ改善する。
