@@ -89,7 +89,7 @@ UI実装を先行させるため、依存関係にあるバックエンドファ
    - `auth.users`: ユーザーが作成されているか。
    - `public.profiles`: 同じIDでレコードが作成され、`username` が保存されているか。
 
-### Phase 5: Main Screen (メイン画面) & Session Management (Next Step)
+### Phase 5: Main Screen (メイン画面) & Session Management (Done)
 
 #### [MODIFY] [src/app/main/page.tsx](file:///Users/hiroakihashiba/Documents/VibeCording/next-supabase-app/src/app/main/page.tsx)
 
@@ -97,8 +97,8 @@ UI実装を先行させるため、依存関係にあるバックエンドファ
 - ユーザー情報の表示確認。
 
 #### Verification (Session)
-- [ ] ログイン後のメイン画面表示確認。
-- [ ] ログアウト機能の動作確認。
+- [x] ログイン後のメイン画面表示確認。
+- [x] ログアウト機能の動作確認。
 
 ### Phase 6: Production Readiness (Future Work)
 
