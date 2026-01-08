@@ -46,7 +46,7 @@ UI実装を先行させるため、依存関係にあるバックエンドファ
   - [x] 既存の `src/app/login/layout.tsx` のGlass Liquid UIロジックをここに移動・共通化する。
   - [x] LoginとSignupで同じ背景エフェクトを共有させる。
 - [x] **Refactor Login Page**: `src/app/login/page.tsx` を `src/app/(auth)/login/page.tsx` に移動・リファクタリング。
-- [x] **Create Signup Page**: `src/app/(auth)/signup/page.tsx` を作成（Loginページのコンポーネントを再利用）。
+- [x] **Create Signup Page**: `src/app/(auth)/signup/page.tsx` を作成（Loginページのコンポーネントを再利用し、同様のデザインで実装済み）。
 
 ### Phase 3: Database & Logic Implementation
 
@@ -64,9 +64,9 @@ UI実装を先行させるため、依存関係にあるバックエンドファ
 - [x] **Create Trigger**: `auth.users` への INSERT をトリガーにする設定。
 
 #### 3.2 Remaining Logic Implementation
-- [ ] **Auth Actions**: `src/app/auth/actions.ts` を実装。
+- [x] **Auth Actions**: `src/app/auth/actions.ts` を実装。
   - Service Layerのみを呼び出す（DALやSupabaseを直接呼ばない）。
-- [ ] **Callback Route**: `src/app/auth/callback/route.ts` を作成し、PKCEフローのコード交換処理を実装。
+- [x] **Callback Route**: `src/app/auth/callback/route.ts` を作成し、PKCEフローのコード交換処理を実装。
 
 
 ### Phase 4: Verification
@@ -75,36 +75,6 @@ UI実装を先行させるため、依存関係にあるバックエンドファ
   - [ ] 新規登録処理がエラーなく完了すること。
   - [ ] **Database Check**: `auth.users` にユーザーが作成されていること。
   - [ ] **Database Check**: `public.profiles` にユーザー名が保存されていること。
-
-#### [NEW] [src/app/(auth)/signup/page.tsx](file:///Users/hiroakihashiba/Documents/VibeCording/next-supabase-app/src/app/(auth)/signup/page.tsx)
-
-- ログインページと同様のデザインで、サインアップ用フォームを実装。
-- Server Action `signup` を呼び出す。
-- 「ログイン」ボタンは `/login` への `Link` に設定。
-
-### 3. Logic Implementation
-
-UI確認完了後、中身の認証ロジックを実装します。
-
-#### [NEW] [src/lib/supabase/server.ts](file:///Users/hiroakihashiba/Documents/VibeCording/next-supabase-app/src/lib/supabase/server.ts) (Implement)
-
-- `createServerClient` の実装 (Cookieストア操作)。
-
-#### [NEW] [src/lib/supabase/client.ts](file:///Users/hiroakihashiba/Documents/VibeCording/next-supabase-app/src/lib/supabase/client.ts)
-
-- `createBrowserClient` の実装。
-
-#### [NEW] [src/middleware.ts](file:///Users/hiroakihashiba/Documents/VibeCording/next-supabase-app/src/middleware.ts)
-
-- `updateSession` 関数の実装 (Session Refresh)。
-
-#### [NEW] [src/app/auth/actions.ts](file:///Users/hiroakihashiba/Documents/VibeCording/next-supabase-app/src/app/auth/actions.ts) (Implement)
-
-- `login`, `signup`, `logout` への `supabase.auth` 呼び出し実装。
-
-#### [NEW] [src/app/auth/callback/route.ts](file:///Users/hiroakihashiba/Documents/VibeCording/next-supabase-app/src/app/auth/callback/route.ts)
-
-- コールバック処理の実装。
 
 ## Verification Plan
 
@@ -129,5 +99,3 @@ UI確認完了後、中身の認証ロジックを実装します。
 #### Verification (Session)
 - [ ] ログイン後のメイン画面表示確認。
 - [ ] ログアウト機能の動作確認。
-
-
