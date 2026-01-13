@@ -113,9 +113,8 @@ UI実装を先行させるため、依存関係にあるバックエンドファ
 
 1.  **Supabase Console**:
     - `Authentication` -> `Providers` -> `Email` -> `Confirm email` を **ON** に変更。
-2.  **SMTP Provider**:
-    - `Authentication` -> `Settings` -> `SMTP Settings` にて、商用SMTP（Resend, SendGrid, AWS SES等）を設定する。
-    - **注意**: デフォルトのSupabase SMTPは、開発用かつ到達率が低いため、`Invalid email` エラーの原因となる公算が高い。
+2.  **SMTP Provider**: [Skipped for Prototype]
+    - プロトタイプのため、ローカル環境 (Inbucket) を使用する。商用SMTP設定は不要とする。
 3.  **UI Update**:
     - `src/app/(auth)/signup/page.tsx` 内の完了メッセージアラート（99行目付近）のコメントアウトを解除する。
     - エラーハンドリング：「メール送信完了」と「実際の認証エラー」を適切に区別するUIへ改善する。
