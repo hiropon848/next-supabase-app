@@ -104,7 +104,7 @@ UI実装を先行させるため、依存関係にあるバックエンドファ
 
 #### [Test Design] (Role: Test Engineer)
 - **Objective**: 手動検証による見落としと速度低下を防ぐため、再現可能なテスト手順を確立する。
-- **Deliverable**: `docs/test/phase6_auth_flow.md` (テストケース)
+- **Deliverable**: `docs/test/auth_test_cases.md` (Add Phase 6 section)
 - **Scope**:
     - メール確認フロー（Signup -> 完了画面確認 -> Verify Link踏む -> Login）
     - エラー時のUI確認（Invalid Token, Already Registered等）

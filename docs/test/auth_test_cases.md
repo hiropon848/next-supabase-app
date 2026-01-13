@@ -95,3 +95,33 @@ QA Masterは本ドキュメントに基づき、Builderの成果物を検証し�
     - 画面リサイズ時にレイアウト破綻がないこと。
     - 背景画像がデザイン意図（Glass Liquid）に沿ったものであること。
     - 全てのテキストが明瞭に読み取れること。
+
+---
+
+## Phase 6: Production Readiness (Confirm Email Flow)
+- **目的:** メール認証機能（Confirm Email: ON）が正しく動作し、未認証ユーザーのログインを阻止できること。
+- **前提:**
+    - Supabase Auth設定で `Confirm email` が有効化されていること。
+    - ローカル環境では Inbucket (http://localhost:54323) を使用してメール受信を確認する。
+- **対象ファイル:** `src/app/(auth)/signup/page.tsx`, `src/app/auth/callback/route.ts`
+- **検証手順:**
+    1.  **新規登録 (Signup):**
+        - `/signup` から新規メールアドレスで登録を行う。
+        - 画面に「確認メールを送信しました」等のメッセージが表示されることを確認。
+        - **DB確認**: `auth.users` の `email_confirmed_at` が `NULL` であること。
+    2.  **ログイン制限 (Login Block):**
+        - メール認証前に `/login` から同ユーザーでログインを試行。
+        - エラー（"Email not confirmed" 等）が表示され、ログインできないことを確認。
+    3.  **メール受信 (Inbucket):**
+        - http://localhost:54323/project/default/auth/templates を開き、認証メールが届いているか確認。
+        - リンク（`Confirmation URL`）を確認。
+    4.  **認証完了 (Verify):**
+        - メール内のリンクをクリックする（またはURLをブラウザに貼り付け）。
+        - `/main` (ダッシュボード) へリダイレクトされることを確認。
+        - **DB確認**: `email_confirmed_at` に日時が記録されていること。
+    5.  **再ログイン (Re-login):**
+        - 一度ログアウトし、再度ログインできることを確認。
+- **合格基準:**
+    - 未認証状態でログインできないこと。
+    - 認証リンク踏破後にログイン可能になること。
+    - DBのステータスが適切に遷移すること。
