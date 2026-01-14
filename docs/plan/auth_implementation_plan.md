@@ -102,7 +102,7 @@ UI実装を先行させるため、依存関係にあるバックエンドファ
 
 ### Phase 6: Production Readiness (Future Work)
 
-#### [Test Design] (Role: Test Engineer)
+#### [x] [Test Design] (Role: Test Engineer)
 - **Objective**: 手動検証による見落としと速度低下を防ぐため、再現可能なテスト手順を確立する。
 - **Deliverable**: `docs/test/auth_test_cases.md` (Add Phase 6 section)
 - **Scope**:
@@ -111,10 +111,10 @@ UI実装を先行させるため、依存関係にあるバックエンドファ
 
 #### Implementation Steps
 
-1.  **Supabase Console**:
+1. [x] **Supabase Console**:
     - `Authentication` -> `Providers` -> `Email` -> `Confirm email` を **ON** に変更。
-2.  **SMTP Provider**: [Skipped for Prototype]
+2. [x] **SMTP Provider**: [Skipped for Prototype]
     - プロトタイプのため、ローカル環境 (Inbucket) を使用する。商用SMTP設定は不要とする。
-3.  **UI Update**:
+3. [ ] **UI Update**:
     - `src/app/(auth)/signup/page.tsx` 内の完了メッセージアラート（99行目付近）のコメントアウトを解除する。
     - エラーハンドリング：「メール送信完了」と「実際の認証エラー」を適切に区別するUIへ改善する。
