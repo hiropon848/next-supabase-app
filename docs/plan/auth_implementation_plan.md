@@ -115,6 +115,22 @@ UI実装を先行させるため、依存関係にあるバックエンドファ
     - `Authentication` -> `Providers` -> `Email` -> `Confirm email` を **ON** に変更。
 2. [x] **SMTP Provider**: [Skipped for Prototype]
     - プロトタイプのため、ローカル環境 (Inbucket) を使用する。商用SMTP設定は不要とする。
-3. [ ] **UI Update**:
+3. [x] **Verification Flow Implementation**:
+    - [x] **UI Implementation**:
+        - `src/app/(auth)/verified/page.tsx` を作成。
+        - **デザイン**: `login`, `signup` を踏襲（Glass Liquid UI）。
+        - **構成要素**:
+            - **タイトル**: "認証完了"
+            - **メッセージ**: "認証が完了しました。<br />ログイン画面からログインしてください。"
+            - **ボタン**:
+                - スタイル: 背景透明（Variant: Outline / Ghost）、幅100%。
+                - ラベル: "ログイン画面へ"
+    - [x] **Routing Logic**:
+        - `src/app/auth/callback/route.ts` のリダイレクト先を `/main` から `/verified` に変更。
+        - **Session Handling**: `exchangeCodeForSession` 成功直後に `supabase.auth.signOut()` を実行し、セッションを破棄してからリダイレクトする。
+    - [x] **Page Protection**:
+        - `/verified` への直接アクセス制御（不正なアクセスの場合はログイン画面へリダイレクト）。
+
+4. [x] **Signup Page Refinement**:
     - `src/app/(auth)/signup/page.tsx` 内の完了メッセージアラート（99行目付近）のコメントアウトを解除する。
     - エラーハンドリング：「メール送信完了」と「実際の認証エラー」を適切に区別するUIへ改善する。

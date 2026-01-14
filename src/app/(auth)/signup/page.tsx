@@ -94,9 +94,17 @@ export default function SignupPage() {
     console.log('[Debug] Server action result:', result);
 
     if (result?.error) {
-      alert(`エラー: ${result.error}`);
+      let errorMessage = result.error;
+      if (result.error.includes('User already registered')) {
+        errorMessage = 'すでに登録されているメールアドレスです。';
+      } else if (result.error.includes('Rate limit exceeded')) {
+        errorMessage = '不正な大量アクセスが発生しています。';
+      } else if (result.error.includes('Too many requests')) {
+        errorMessage = 'リクエスト上限に達しています。時間をおいて再度送信してください。';
+      }
+      alert(`エラー: ${errorMessage}`);
     } else {
-      //alert('確認メールを送信しました。メールボックスを確認してください。');
+      alert('確認メールを送信しました。\nメールボックスを確認し、認証リンクをクリックして登録を完了してください。');
       router.push('/login');
     }
     setLoading(false);
