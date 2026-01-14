@@ -18,6 +18,7 @@
 - **インポート順序**: 標準ライブラリ -> 外部ライブラリ -> 相対パス の順で記述。
 - **型定義**: `interface` よりも `type` エイリアスを優先して使用する。
 - **Server/Client**: 明示的に必要な場合を除き、可能な限り Server Component (`use client`なし) として実装する。
+- **View/Logic Separation**: コンポーネント内のロジック（State, Effect, Handler）は `hooks/` ディレクトリ内の Custom Hook に分離し、`page.tsx` やコンポーネントファイルはこれを利用するだけの View (Presentational) に徹すること。
 
 ## 3. UI/UX ガイドライン (Glass Liquid Theme)
 
@@ -34,10 +35,18 @@
 
 ## 5. ディレクトリ構造
 
-- `src/app`: Page, Layout, Route Handlers (Next.js App Router)
-- `src/components/ui`: shadcn/ui components
-- `src/lib`: Utility functions, Supabase clients
-- `docs`: Documentation and Rules
+- `src/`
+    - `app/`: ページ, レイアウト, ルートハンドラー (App Router)
+    - `components/ui/`: shadcn/ui コンポーネント
+    - `hooks/`: カスタムフック (ビジネスロジックの分離)
+    - `data/`: データアクセス層 (DAL)
+    - `services/`: サービス層 (ビジネスロジック)
+    - `types/`: 共通型定義
+    - `lib/`: ユーティリティ, Supabaseクライアント
+- `docs/`
+    - `plan/`: 実装計画書
+    - `test/`: テスト仕様書
+    - `RULES.md`: プロジェクトルール
 
 ## 6. 品質管理 (Quality Control)
 
