@@ -183,16 +183,35 @@
 - **Fact over Assumption**: 「Lintは通っているはずだ」「サーバーは起動しているはずだ」という**「はず（Assumption）」を思考から排除する**。
 - **Action**: 不確実な場合は、必ず `ls`, `cat`, `ps` 等のコマンドで**事実を確認（Fact Check）**してから次の行動決定を行うこと。
 
-## 10. Agent Workflows (専門エージェントの適用)
+## 10. Agent Workflows (専門エージェントの協働プロトコル)
 
-タスク実行時は、担当フェーズに合わせて以下の定義ファイルを読み込み、連携して作業を進める。
+本プロジェクトでは、単一のAIがすべてのタスクを処理するのではなく、明確に定義された「専門エージェント」が分担して作業を行う。
 
-1.  **着手前:** `Requirement Guard` (`.agent/workflows/agent_requirement_guard.md`)
-2.  **調査:** `FactChecker` (`.agent/workflows/agent_fact_checker.md`)
-3.  **計画:** `Architect` (`.agent/workflows/agent_architect.md`)
-4.  **テスト設計:** `Test Engineer` (`.agent/workflows/agent_test_engineer.md`)
-5.  **実装:** `Builder` (`.agent/workflows/agent_builder.md`)
-6.  **完了・報告:** `QA Master` (`.agent/workflows/agent_qa_master.md`)
+### 10.1 Role Definition (役割定義)
+各フェーズで呼び出すべきエージェント定義ファイル：
+
+1.  **Requirement Guard (要件・指示の門番):** `.agent/workflows/agent_requirement_guard.md`
+2.  **FactChecker (事実確認担当):** `.agent/workflows/agent_fact_checker.md`
+3.  **Architect (設計・仕様責任者):** `.agent/workflows/agent_architect.md`
+4.  **Test Engineer (テスト設計責任者):** `.agent/workflows/agent_test_engineer.md`
+5.  **Builder (実装責任者):** `.agent/workflows/agent_builder.md`
+6.  **QA Master (品質管理責任者):** `.agent/workflows/agent_qa_master.md`
+
+### 10.2 Plan & Assignment Protocol (計画とアサインの義務)
+**Architect (設計・仕様責任者)** は、`implementation_plan.md` 等の計画書を作成する際、すべての「手順 (Execution Steps)」および「検証 (Verification)」項目に対し、担当エージェントを明記しなければならない。
+
+- **Format:** `1. [ ] **Title** [/agent_role]: Description...`
+- **Rule:** 「誰がやるか」が一行目（行頭付近）で明確に判別できるように配置すること。
+- **Assignment Verification (アサイン時の定義確認):**
+    - 担当エージェントを決定する際は、必ずそのエージェントのワークフローファイル（`.agent/workflows/` 以下）を `read` する。
+    - **「制約事項 (Constraints)」** や **「担当フェーズ」** に違反していないことを確認した上で割り当てなければならない。推測でのアサインは禁止する。
+
+### 10.3 Execution Protocol (なりきり義務)
+タスク実行者は、計画書で指定された担当エージェントタグ（例: `[/agent_test_engineer]`）に到達した際、**必ず** 以下の手順を踏まなければならない。
+
+1.  **Context Switch:** 指定されたワークフローファイル（例: `.agent/workflows/agent_test_engineer.md`）の内容を参照・ロードする。
+2.  **Role Play:** その定義ファイルに書かれた「目的」「制約事項」「Checklist」を厳守し、その専門家として振る舞う。
+3.  **Strict Delegation:** 自分の役割定義外の作業（例: **Test Engineer (テスト設計責任者)** が実装コードを書く、**Architect (設計・仕様責任者)** がデバッグする等）は固く禁ずる。必要であれば適切なエージェントへバトンタッチすること。
 
 ## 11. Self-Correction Checklist (行動前の最終確認)
 
