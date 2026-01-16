@@ -178,6 +178,10 @@
     - コードだけを見て「見た目」を想像で語ることを禁止する。
     - アセット（画像、フォント、Global CSS）の存在確認を怠ることを禁止する。
     - 不明な画像ファイル（例: `bg-[url('...')]`）が見つかった場合、その中身（実体）を確認せずに削除・置換してはならない。
+- **Tooling Mandate (撮影手段の強制):**
+    - **Native Capability First:** スクリーンショット取得には、環境にプリインストールされている **「Antigravity Browser Extension」 (またはエージェント標準の撮影ツール)** を使用すること。
+    - **Installation Ban:** 単なる確認や撮影のために、Puppeteer, Playwright, Selenium 等の重量級ライブラリを**新規インストール・構成することを固く禁ずる**。
+    - **Assumption Fix:** もし「撮影できない」と判断しそうになった場合は、自身のCapability（能力一覧）を再確認すること。標準機能で撮影は可能である。
 
 ### 9.6. State Awareness Protocol (現状認識の是正)
 - **Fact over Assumption**: 「Lintは通っているはずだ」「サーバーは起動しているはずだ」という**「はず（Assumption）」を思考から排除する**。
