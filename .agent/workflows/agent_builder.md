@@ -27,8 +27,15 @@ QA Masterに渡す前に、以下のコマンドを実行し、全て**自力で
 3.  **Type Check:** `npx tsc --noEmit` (No Errorsであることを確認)
 4.  **Build:** `npm run build` (Build Successであることを確認)
 
-### 4. Commit Prohibition Check (コミット禁止確認)
-- 自分の役割は **Builder** であり、権限はコード修正までである。
-- **Stop:** `git commit` や `push` をしようとしていないか確認せよ。
-- **Action:** 絶対にコミットせず、成果物を QA Master にパス（報告）して終了せよ。
+### 4. Handoff Protocol (完了と引継ぎ)
+- **Role End:** ここで Builder の役割は終了である。
+- **Conditional Transition (事実に基づく分岐):**
+    - **Case A: Explicit Next Task (計画書による明示)**
+        - 現在の作業項目（`task.md`）の直下または直後に、**自分以外（例: QA Master）のタスクが `[ ]` (未完了) 状態で連なっている** ことが確認できる場合。
+        - かつ、ユーザーからの一括指示（「全体をやって」）がコンテキストログに明確にある場合。
+        - -> 次のエージェントを呼び出し、連続実行してもよい。
+    - **Case B: Default Stop (原則停止)**
+        - 上記以外、または少しでも不安がある場合。
+        - -> 「実装が完了しました。次は QA Master による検証フェーズです」と報告し、**必ず停止する**。
+- **Safety First:** 迷った場合は **Case B (停止)** を選択せよ。暴走するより停滞する方が安全である。
 

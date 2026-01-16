@@ -68,7 +68,7 @@ src/
 3.  [x] **Baseline Capture** [/agent_architect]: 現在のUI（Signup, Login, Verified）のスクリーンショットを取得し、変更がないことを確認するための正解データとする。Verifiedはメーラー経由しないと遷移できない画面なので作業完了後にユーザーに依頼する。
 
 ### Phase 3.2: Hook Foundation
-1.  [ ] [/agent_builder] `src/hooks/auth/` ディレクトリ作成。
+1.  [x] [/agent_builder] `src/hooks/auth/` ディレクトリ作成。
 
 ### Phase 3.3: Signup Refactoring
 1.  [ ] **Create Hook** [/agent_builder]: `src/hooks/auth/useSignup.ts` を作成し、`signup/page.tsx` からロジックを移設。
