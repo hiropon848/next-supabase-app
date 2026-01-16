@@ -63,9 +63,9 @@ src/
 ### Phase 3.1: Specification Analysis & Test Design
 現状の仕様をコードから正確に抽出し、それを元にテストケースを作成します。
 
-1.  [ ] **Analyze Specs** [/agent_fact_checker]: `src/app/(auth)/**/page.tsx` のコードを解析し、バリデーションロジック、分岐条件、エラーメッセージ定数をリストアップする。
-2.  [ ] **Test Case Update** [/agent_test_engineer]: 上記で特定した仕様に基づき、Input/Outputを網羅した詳細なテストケース（Checklist）を `docs/test/auth_test_cases.md` に作成する。
-3.  [ ] **Baseline Capture** [/agent_qa_master]: 現在のUI（Signup, Login, Verified）のスクリーンショットを取得し、変更がないことを確認するための正解データとする。
+1.  [x] **Analyze Specs** [/agent_fact_checker]: `src/app/(auth)/**/page.tsx` のコードを解析し、バリデーションロジック、分岐条件、エラーメッセージ定数をリストアップする。
+2.  [x] **Test Case Update** [/agent_test_engineer]: 上記で特定した仕様に基づき、Input/Outputを網羅した詳細なテストケース（Checklist）を `docs/test/separate_view_logic_test_cases.md` (新規) に作成する。
+3.  [x] **Baseline Capture** [/agent_architect]: 現在のUI（Signup, Login, Verified）のスクリーンショットを取得し、変更がないことを確認するための正解データとする。Verifiedはメーラー経由しないと遷移できない画面なので作業完了後にユーザーに依頼する。
 
 ### Phase 3.2: Hook Foundation
 1.  [ ] [/agent_builder] `src/hooks/auth/` ディレクトリ作成。
@@ -73,22 +73,22 @@ src/
 ### Phase 3.3: Signup Refactoring
 1.  [ ] **Create Hook** [/agent_builder]: `src/hooks/auth/useSignup.ts` を作成し、`signup/page.tsx` からロジックを移設。
 2.  [ ] **Refactor View** [/agent_builder]: `src/app/(auth)/signup/page.tsx` を修正し、Hook を利用する形に変更。
-3.  [ ] **Verify** [/agent_qa_master]: Phase 3.1 で更新された `docs/test/auth_test_cases.md` の "Behavioral Regression (Signup Logic)" および "Visual Regression" テストを実行し、すべての合格基準を満たすことを確認する。
+3.  [ ] **Verify** [/agent_qa_master]: Phase 3.1 で更新された `docs/test/separate_view_logic_test_cases.md` の "Behavioral Regression (Signup Logic)" および "Visual Regression" テストを実行し、すべての合格基準を満たすことを確認する。
 
 ### Phase 3.4: Login Refactoring
 1.  [ ] **Create Hook** [/agent_builder]: `src/hooks/auth/useLogin.ts` を作成し、`login/page.tsx` からロジックを移設。
 2.  [ ] **Refactor View** [/agent_builder]: `src/app/(auth)/login/page.tsx` を修正し、Hook を利用する形に変更。
-3.  [ ] **Verify** [/agent_qa_master]: Phase 3.1 で更新された `docs/test/auth_test_cases.md` の "Behavioral Regression (Login Logic)" および "Visual Regression" テストを実行し、すべての合格基準を満たすことを確認する。
+3.  [ ] **Verify** [/agent_qa_master]: Phase 3.1 で更新された `docs/test/separate_view_logic_test_cases.md` の "Behavioral Regression (Login Logic)" および "Visual Regression" テストを実行し、すべての合格基準を満たすことを確認する。
 
 ### Phase 3.5: Verification Page Refactoring
 1.  [ ] **Create Hook** [/agent_builder]: `src/hooks/auth/useVerificationProtection.ts` を作成。
 2.  [ ] **Refactor View** [/agent_builder]: `src/app/(auth)/verified/page.tsx` を修正。
-3.  [ ] **Verify** [/agent_qa_master]: Phase 3.1 で更新された `docs/test/auth_test_cases.md` の "Verified Page Logic" および "Visual Regression" テストを実行し、すべての合格基準を満たすことを確認する。
+3.  [ ] **Verify** [/agent_qa_master]: Phase 3.1 で更新された `docs/test/separate_view_logic_test_cases.md` の "Verified Page Logic" および "Visual Regression" テストを実行し、すべての合格基準を満たすことを確認する。
 
 ## Verification Plan
 
 ### Manual Verification
 リファクタリング前後で挙動が変わらないこと（回帰テスト）を確認します。
 
-1.  [ ] **Regression Testing** [/agent_qa_master]: `docs/test/auth_test_cases.md` の全シナリオを再実行。
+1.  [ ] **Regression Testing** [/agent_qa_master]: `docs/test/separate_view_logic_test_cases.md` の全シナリオを再実行。
 2.  [ ] **UI Integrity** [/agent_qa_master]: Phase 3.1 で取得した Baseline と現在の画面を比較し、ピクセルパーフェクト（または意図した通りの維持）であることを確認。
