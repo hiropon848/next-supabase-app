@@ -1,8 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { signup } from '@/app/auth/actions';
+import { useSignup } from '@/hooks/auth/useSignup';
 import {
   CardContent,
   CardDescription,
@@ -13,102 +12,8 @@ import { FormInput } from '@/components/ui/form-input';
 import { Button } from '@/components/ui/button';
 
 export default function SignupPage() {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [emailError, setEmailError] = useState<string | null>(null);
-  const [passwordError, setPasswordError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
-
-  const validateForm = () => {
-    console.log('[Debug] validateForm started');
-    let isValid = true;
-    setEmailError(null);
-    setPasswordError(null);
-
-    if (!email) {
-      setEmailError('メールアドレスを入力してください');
-      isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailError('有効なメールアドレスを入力してください');
-      isValid = false;
-    }
-
-    if (!password) {
-      setPasswordError('パスワードを入力してください');
-      isValid = false;
-    } else if (password.length < 6) {
-      setPasswordError('パスワードは6文字以上で入力してください');
-      isValid = false;
-    }
-
-    console.log('[Debug] validateForm result:', isValid, { emailError: !email ? 'empty' : null, passwordError: !password ? 'empty' : null });
-    return isValid;
-  };
-
-  const handleChange = (
-    field: 'username' | 'email' | 'password',
-    value: string
-  ) => {
-    if (field === 'username') {
-      setUsername(value);
-    } else if (field === 'email') {
-      setEmail(value);
-      if (emailError) setEmailError(null);
-    } else {
-      setPassword(value);
-      if (passwordError) setPasswordError(null);
-    }
-  };
-
-  const handleBlur = (field: 'email' | 'password') => {
-    if (field === 'email') {
-      if (!email) {
-        setEmailError('メールアドレスを入力してください');
-      } else if (!/\S+@\S+\.\S+/.test(email)) {
-        setEmailError('有効なメールアドレスを入力してください');
-      }
-    } else if (field === 'password') {
-      if (!password) {
-        setPasswordError('パスワードを入力してください');
-      } else if (password.length < 6) {
-        setPasswordError('パスワードは6文字以上で入力してください');
-      }
-    }
-  };
-
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('[Debug] handleSignUp started');
-    if (!validateForm()) return;
-    setLoading(true);
-
-    const formData = new FormData();
-    formData.append('email', email);
-    formData.append('password', password);
-    formData.append('username', username);
-
-    console.log('[Debug] Calling signup server action');
-    const result = await signup(formData);
-    console.log('[Debug] Server action result:', result);
-
-    if (result?.error) {
-      let errorMessage = result.error;
-      if (result.error.includes('User already registered')) {
-        errorMessage = 'すでに登録されているメールアドレスです。';
-      } else if (result.error.includes('Rate limit exceeded')) {
-        errorMessage = '不正な大量アクセスが発生しています。';
-      } else if (result.error.includes('Too many requests')) {
-        errorMessage = 'リクエスト上限に達しています。時間をおいて再度送信してください。';
-      }
-      alert(`エラー: ${errorMessage}`);
-    } else {
-      alert('確認メールを送信しました。\nメールボックスを確認し、認証リンクをクリックして登録を完了してください。');
-      router.push('/login');
-    }
-    setLoading(false);
-  };
+  const { formState, errors, loading, handlers } = useSignup();
 
   const handleLogin = () => {
     router.push('/login');
@@ -125,14 +30,18 @@ export default function SignupPage() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSignUp} className="grid gap-6 px-1" noValidate>
+        <form
+          onSubmit={handlers.handleSubmit}
+          className="grid gap-6 px-1"
+          noValidate
+        >
           <FormInput
             id="username"
             type="text"
             label="ユーザー名"
             placeholder="user name"
-            value={username}
-            onChange={(value) => handleChange('username', value)}
+            value={formState.username}
+            onChange={(value) => handlers.handleChange('username', value)}
             required
           />
           <FormInput
@@ -140,20 +49,20 @@ export default function SignupPage() {
             type="email"
             label="メールアドレス"
             placeholder="name@example.com"
-            value={email}
-            onChange={(value) => handleChange('email', value)}
-            onBlur={() => handleBlur('email')}
-            error={emailError}
+            value={formState.email}
+            onChange={(value) => handlers.handleChange('email', value)}
+            onBlur={() => handlers.handleBlur('email')}
+            error={errors.email}
             required
           />
           <FormInput
             id="password"
             type="password"
             label="パスワード"
-            value={password}
-            onChange={(value) => handleChange('password', value)}
-            onBlur={() => handleBlur('password')}
-            error={passwordError}
+            value={formState.password}
+            onChange={(value) => handlers.handleChange('password', value)}
+            onBlur={() => handlers.handleBlur('password')}
+            error={errors.password}
             required
           />
           <div className="mt-4 flex flex-col gap-3">

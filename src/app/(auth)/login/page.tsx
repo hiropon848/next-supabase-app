@@ -85,9 +85,11 @@ export default function LoginPage() {
       if (error.message.includes('Invalid login credentials')) {
         errorMessage = '無効なメールアドレスまたはパスワードです。';
       } else if (error.message.includes('Email not confirmed')) {
-        errorMessage = 'メール認証が完了していません。受信したメールから認証をおこなってください。';
+        errorMessage =
+          'メール認証が完了していません。受信したメールから認証をおこなってください。';
       } else if (error.message.includes('Too many requests')) {
-        errorMessage = 'リクエスト上限に達しています。時間をおいて再度送信してください。';
+        errorMessage =
+          'リクエスト上限に達しています。時間をおいて再度送信してください。';
       }
       alert(`エラー: ${errorMessage}`);
     } else {

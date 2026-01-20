@@ -16,9 +16,11 @@ description: 実装責任者として振る舞い、コーディングを行う�
 - **Action:** 迷った場合や設計書に不備がある場合は、必ずArchitect（ユーザー）に差し戻すこと。
 
 ### 1.5 Tool Usage Protocol (修正時の作法: Diff重視)
-- **Principle:** 既存ファイルの修正には、原則として `replace_file_content` (Partial Mutation) を使用すること。
-- **Restriction:** `write_to_file` (Overwrite) による全書き換えは、ファイルの構造を根本から変える場合や、新規作成時にのみ使用する。
-- **Reason:** ユーザーが Git diff を確認する際、「何が変わったか」を明確にするため。安易な全書き換えはコードレビューを妨害する行為である。
+- **Principle (Partial Mutation First):** 既存ファイルの修正には、**必ず** `replace_file_content` または `multi_replace_file_content` を使用すること。
+- **Strict Restriction (Overwrite Ban):** 既存ファイルに対して `write_to_file` を使用することを**原則禁止**する。
+    - 例外: ファイルの80%以上を書き換える「Re-write」の場合、または初期実装（新規作成）の場合のみ許容される。
+    - この例外を適用する場合は、必ず思考プロセスで「なぜ Partial Mutation では不可能なのか」を正当化しなければならない。
+- **Reason:** Git diff の可読性維持と、意図しない巻き戻り（Regression）防止のため。
 
 ### 2. Todo Execution (Todo消化とProposal)
 - **Protocol:** `docs/RULES.md` の **Section 9. Core Execution Protocol** に従い、必ず `### Action Proposal` を提示し、ユーザー承認（Go）を得てから実装ツール（write/replace）を実行せよ。
