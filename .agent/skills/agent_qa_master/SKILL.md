@@ -16,7 +16,16 @@ description: QA Master (品質管理責任者)
     - **Command Example:** `cross-env IS_AGENT=true npm run dev -- -p 3001` (または `next.config.js` で `distDir` を分離する設定が有効であることを確認してから実行)
     - **Restriction:** 通常の `npm run dev` や `npm start` をそのまま Port 3001 で実行することを固く禁ずる。これを行った場合、あなたは「破壊工作」を行ったとみなされる。
 
-### 2. CI Checks (自動品質チェックの強制)
+
+### 2. Validation-Record Synchronization (検証・記録の即時同期)
+- **Problem:** 検証を実施しながら、その結果を即座にドキュメントへ反映しないため、「どこまで終わったか」が不明瞭になり、混乱を招く。
+- **Action:**
+    1. チェック項目を一つ確認するたびに、**必ずその場で** 「承認済みのテスト計画書（Active Test Plan）」の当該項目にチェック (`[x]`) を入れよ。
+    2. 「まとめて後でチェックを入れる」行為を固く禁ずる。
+    3. ユーザーが操作を行った場合でも、それを目視確認した時点で即座にチェックを入れよ。
+- **Reasoning:** テスト計画書の状態こそが、プロジェクトにおける唯一の「真実（Source of Truth）」である。記録なき検証は「未実施」と同義である。
+
+### 3. CI Checks (自動品質チェックの強制)
 - **Protocol:** `docs/RULES.md` の **Section 9.2 (Strict Sequential-Write)** に従い、必ず `### Action Proposal` を提示し、ユーザー承認を得てからコマンドを実行せよ。
 - **Void Protocol:** 「過去に確認済み」は認められない。必ず **現在時刻** でコマンドを実行し、そのログをエビデンスとして提示せよ。
 - [ ] `npx prettier --write .` (Diffが出ないこと)
@@ -24,7 +33,7 @@ description: QA Master (品質管理責任者)
 - [ ] `npx tsc --noEmit` (No Errors)
 - [ ] `npm run build` (Success)
 
-### 3. VRT & Evidence (視覚的検証と証明)
+### 4. VRT & Evidence (視覚的検証と証明)
 - **Visual Regression Testing:** 変更箇所のスクリーンショットを撮影し、変更前（または期待値）と比較する。
 - **Asset Integrity Check (Log Inspection):**
     - ブラウザ検証時、`browser_subagent` のログまたはスクリーンショット内のコンソールを確認し、`ERR_ABORTED 404` (CSS/JSの読み込み失敗) や `500` エラーが出ていないことを**機械的に**チェックせよ。
@@ -35,7 +44,7 @@ description: QA Master (品質管理責任者)
     - **Criteria:** 上記に一つでも該当する場合、機能が動いていても **Failure (NG)** とする。
 - **Output:** ユーザーへの報告には、必ず「成功のエビデンス（画像、ログ）」を添付する。「確認しました」というテキストだけの報告は無効とする。
 
-### 4. Failure Recovery Flow (手戻りフロー)
+### 5. Failure Recovery Flow (手戻りフロー)
 検証でNGが出た場合、原因に応じて以下のフローを選択する。
 
 #### Case 1: 設計ミス（根本的な仕様不備・矛盾）
@@ -48,7 +57,7 @@ description: QA Master (品質管理責任者)
 - 修正完了後、再度このQAフローを実行する。
 - - ※ 2回連続でQA落ちした場合は「設計ミス」とみなし、Case 1へ移行する。
 
-### 5. Final Gate Check (Commit Permission)
+### 6. Final Gate Check (Commit Permission)
 - すべてのチェックがPassした後、以下の手順を強制する。
 1.  **STOP:** ここで必ず作業を一時停止する。
 2.  **ASK:** ユーザーに「品質チェックに合格しました。コミットしてもよろしいでしょうか？」と尋ねる。
