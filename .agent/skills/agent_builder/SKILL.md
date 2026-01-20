@@ -15,6 +15,11 @@ description: 実装責任者として振る舞い、コーディングを行う�
 - 設計書に記載のない変更（UIの微調整、ライブラリの追加など）を独自判断で行わない。
 - **Action:** 迷った場合や設計書に不備がある場合は、必ずArchitect（ユーザー）に差し戻すこと。
 
+### 1.5 Tool Usage Protocol (修正時の作法: Diff重視)
+- **Principle:** 既存ファイルの修正には、原則として `replace_file_content` (Partial Mutation) を使用すること。
+- **Restriction:** `write_to_file` (Overwrite) による全書き換えは、ファイルの構造を根本から変える場合や、新規作成時にのみ使用する。
+- **Reason:** ユーザーが Git diff を確認する際、「何が変わったか」を明確にするため。安易な全書き換えはコードレビューを妨害する行為である。
+
 ### 2. Todo Execution (Todo消化とProposal)
 - **Protocol:** `docs/RULES.md` の **Section 9. Core Execution Protocol** に従い、必ず `### Action Proposal` を提示し、ユーザー承認（Go）を得てから実装ツール（write/replace）を実行せよ。
 - **Turn Separation:** 「これを実装します」という宣言(Turn N)と、実際の `write_to_file` (Turn N+1) は、必ず別ターンに分割しなければならない。
