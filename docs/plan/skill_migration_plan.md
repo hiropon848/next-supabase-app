@@ -14,43 +14,44 @@
 ```text
 .agent/
   ├── skills/                  <-- 新設 (スキル一覧のルート)
-  │   ├── architect/           <-- 役割名・機能名 (ディレクトリ名)
+  │   ├── agent_architect/     <-- 元ファイル名と完全一致
   │   │   └── SKILL.md         <-- 定義ファイル (固定名)
-  │   ├── builder/
+  │   ├── agent_builder/
   │   │   └── SKILL.md
-  │   ├── force_reset_bias/    <-- ユーティリティも同様
+  │   ├── util_force_reset_bias/  <-- 接頭辞も維持
   │   │   └── SKILL.md
   │   └── ...
   │
-  └── workflows/               <-- 移行完了後に削除
+  └── workflows/               <-- ショートカット置き場として維持
 ```
 
 ## 3. 移行ステップ
 
-### Step 1: フォルダ作成とファイルの移動 & リネーム
+### Step 1: フォルダ作成とファイルの移動 (Strict Name Match)
 
-以下の対応表に従ってフォルダを作成し、既存のマークダウンファイルを移動して `SKILL.md` にリネームしてください。
+`.agent/workflows/` 内の既存ファイルを、**ファイル名（拡張子除く）と完全に一致するディレクトリ名** で `.agent/skills/` に移動し、`SKILL.md` にリネームします。
+**重要: 接頭辞（agent_, util_）の省略や変更は一切行いません。**
 
-**Role Skills (役割)**
+#### 対象ファイルのマッピング
 
-| 元ファイル (`.agent/workflows/`) | 新パス (`.agent/skills/...`) | スキルID (`name`) |
+| 元のファイル (`.agent/workflows/`) | 新しいパス (`.agent/skills/`) | ディレクトリ名 (Skill名) |
 | :--- | :--- | :--- |
-| `agent_architect.md` | `architect/SKILL.md` | `architect` |
-| `agent_builder.md` | `builder/SKILL.md` | `builder` |
-| `agent_fact_checker.md` | `fact_checker/SKILL.md` | `fact_checker` |
-| `agent_qa_master.md` | `qa_master/SKILL.md` | `qa_master` |
-| `agent_requirement_guard.md` | `requirement_guard/SKILL.md` | `requirement_guard` |
-| `agent_test_engineer.md` | `test_engineer/SKILL.md` | `test_engineer` |
+| `agent_architect.md` | `agent_architect/SKILL.md` | `agent_architect` |
+| `agent_builder.md` | `agent_builder/SKILL.md` | `agent_builder` |
+| `agent_fact_checker.md` | `agent_fact_checker/SKILL.md` | `agent_fact_checker` |
+| `agent_qa_master.md` | `agent_qa_master/SKILL.md` | `agent_qa_master` |
+| `agent_requirement_guard.md` | `agent_requirement_guard/SKILL.md` | `agent_requirement_guard` |
+| `agent_test_engineer.md` | `agent_test_engineer/SKILL.md` | `agent_test_engineer` |
 
 **Utility Skills (機能)**
 
 | 元ファイル (`.agent/workflows/`) | 新パス (`.agent/skills/...`) | スキルID (`name`) |
 | :--- | :--- | :--- |
-| `util_clear_old_verification...md` | `clear_old_verification_images/SKILL.md` | `clear_old_verification_images` |
-| `util_create_commit_command.md` | `create_commit/SKILL.md` | `create_commit` |
-| `util_force_reset_bias.md` | `force_reset_bias/SKILL.md` | `force_reset_bias` |
-| `util_only_text_answer.md` | `only_text_answer/SKILL.md` | `only_text_answer` |
-| `util_show_next_task.md` | `show_next_task/SKILL.md` | `show_next_task` |
+| `util_clear_old_verification...md` | `util_clear_old_verification_images/SKILL.md` | `util_clear_old_verification_images` |
+| `util_create_commit_command.md` | `util_create_commit_command/SKILL.md` | `util_create_commit_command` |
+| `util_force_reset_bias.md` | `util_force_reset_bias/SKILL.md` | `util_force_reset_bias` |
+| `util_only_text_answer.md` | `util_only_text_answer/SKILL.md` | `util_only_text_answer` |
+| `util_show_next_task.md` | `util_show_next_task/SKILL.md` | `util_show_next_task` |
 
 ### Step 2: YAML Frontmatter の追加 (必須)
 
@@ -71,7 +72,7 @@ description: [このスキルの役割や実行内容の簡潔な説明]
 #### 具体例: Architect の場合
 ```markdown
 ---
-name: architect
+name: agent_architect  # <- 元のファイル名と完全一致させる
 description: 設計・仕様責任者として振る舞い、実装計画を策定するスキル
 ---
 
@@ -79,14 +80,14 @@ description: 設計・仕様責任者として振る舞い、実装計画を策�
 ...
 ```
 
-#### 具体例: Create Commit の場合
+#### 具体例: util_create_commit_command の場合
 ```markdown
 ---
-name: create_commit
+name: util_create_commit_command  # <- 元のファイル名と完全一致させる
 description: プロジェクトの変更内容を確認し、適切なコミットコマンドを作成するスキル
 ---
 
-# Create Commit Command
+# util_create_commit_command
 ...
 ```
 
@@ -97,23 +98,38 @@ description: プロジェクトの変更内容を確認し、適切なコミッ�
 #### 変更ターゲット 1: 10.1 Role Definition (パスの置換)
 | ロール | 変更前 (Before) | 変更後 (After) |
 | :--- | :--- | :--- |
-| Requirement Guard | `.agent/workflows/agent_requirement_guard.md` | `.agent/skills/requirement_guard/SKILL.md` |
-| FactChecker | `.agent/workflows/agent_fact_checker.md` | `.agent/skills/fact_checker/SKILL.md` |
-| Architect | `.agent/workflows/agent_architect.md` | `.agent/skills/architect/SKILL.md` |
-| Test Engineer | `.agent/workflows/agent_test_engineer.md` | `.agent/skills/test_engineer/SKILL.md` |
-| Builder | `.agent/workflows/agent_builder.md` | `.agent/skills/builder/SKILL.md` |
-| QA Master | `.agent/workflows/agent_qa_master.md` | `.agent/skills/qa_master/SKILL.md` |
+| Requirement Guard | `.agent/workflows/agent_requirement_guard.md` | `.agent/skills/agent_requirement_guard/SKILL.md` |
+| FactChecker | `.agent/workflows/agent_fact_checker.md` | `.agent/skills/agent_fact_checker/SKILL.md` |
+| Architect | `.agent/workflows/agent_architect.md` | `.agent/skills/agent_architect/SKILL.md` |
+| Test Engineer | `.agent/workflows/agent_test_engineer.md` | `.agent/skills/agent_test_engineer/SKILL.md` |
+| Builder | `.agent/workflows/agent_builder.md` | `.agent/skills/agent_builder/SKILL.md` |
+| QA Master | `.agent/workflows/agent_qa_master.md` | `.agent/skills/agent_qa_master/SKILL.md` |
 
 #### 変更ターゲット 2: 10.2 & 10.3 Protocols (指示の置換)
 | 対象箇所 | 変更前 (Before) | 変更後 (After) |
 | :--- | :--- | :--- |
 | Assignment Verification | `ワークフローファイル（.agent/workflows/ 以下）を read する` | `スキル定義ファイル（.agent/skills/*/SKILL.md）を read する` |
-| Context Switch | `指定されたワークフローファイル（例: .agent/workflows/agent_test_engineer.md）の内容を参照・ロードする` | `指定されたスキル定義ファイル（例: .agent/skills/test_engineer/SKILL.md）の内容を参照・ロードする` |
+| Context Switch | `指定されたワークフローファイル（例: .agent/workflows/agent_test_engineer.md）の内容を参照・ロードする` | `指定されたスキル定義ファイル（例: .agent/skills/agent_test_engineer/SKILL.md）の内容を参照・ロードする` |
 
-### Step 4: クリーンアップ
+### Step 4: ショートカットWorkflowの作成
 
-1.  上記作業が完了したら、`.agent/workflows/` ディレクトリの中身が空であることを確認します。
-2.  `.agent/workflows/` ディレクトリ自体を削除します。
+Util系コマンドを `/` (Slash Command) で呼び出せるようにするため、`.agent/workflows/` にショートカット用ファイルを作成します。
+
+#### 作成ルール
+- **ファイル名:** `cmd_[元のファイル名].md`
+- **内容:** 対応するSkillを呼び出す指示のみを記述する（`// turbo` を付与して自動実行させる）。
+
+#### 作成リスト
+- `cmd_util_clear_old_verification_images.md`
+- `cmd_util_create_commit_command.md`
+- `cmd_util_force_reset_bias.md`
+- `cmd_util_only_text_answer.md`
+- `cmd_util_show_next_task.md`
+
+### Step 5: クリーンアップ
+
+1.  上記作業が完了したら、`.agent/workflows/` ディレクトリ内の「移行済みファイル」のみを削除します。
+2.  **注意:** `.agent/workflows/` ディレクトリ自体は削除せず、Step 4で作成したショートカットファイルを保持します。
 
 ## 4. 運用ルール (Zero Maintenance)
 
