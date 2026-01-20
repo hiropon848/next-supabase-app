@@ -1,4 +1,5 @@
 ---
+name: agent_requirement_guard
 description: Requirement Guard (要件・指示の門番)
 ---
 

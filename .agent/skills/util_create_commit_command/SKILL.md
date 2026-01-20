@@ -1,4 +1,5 @@
 ---
+name: util_create_commit_command
 description: ここまでの変更内容のコミットコマンドを作成する（実行厳禁）
 ---
 

@@ -1,4 +1,5 @@
 ---
+name: util_show_next_task
 description: 直近の作業中の計画書を参照し、次のタスクを記述通りの表記で表示する
 ---
 

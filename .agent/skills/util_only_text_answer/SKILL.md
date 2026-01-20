@@ -1,4 +1,5 @@
 ---
+name: util_only_text_answer
 description: ユーザー入力に対して、絶対にファイル変更などの副次作用を起こさず、テキスト回答のみを行う。（強制ReadOnlyモード）
 ---
 

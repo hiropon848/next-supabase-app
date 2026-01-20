@@ -1,4 +1,5 @@
 ---
+name: util_clear_old_verification_images
 description: 指定した時間（デフォルト24h）以上経過した現在のプロジェクトの検証用画像を削除する
 ---
 

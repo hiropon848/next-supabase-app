@@ -1,5 +1,6 @@
 ---
-description: Architect (設計・仕様責任者)
+name: agent_architect
+description: 設計・仕様責任者として振る舞い、実装計画を策定するスキル
 ---
 
 # Architect (設計・仕様責任者)

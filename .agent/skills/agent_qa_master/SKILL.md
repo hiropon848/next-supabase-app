@@ -1,4 +1,5 @@
 ---
+name: agent_qa_master
 description: QA Master (品質管理責任者)
 ---
 

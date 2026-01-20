@@ -1,5 +1,6 @@
 ---
-description: FactChecker (事実確認担当)
+name: agent_fact_checker
+description: 事実確認担当として振る舞い、情報の正確性を検証するスキル
 ---
 
 # FactChecker (事実確認担当 / 旧Researcher)

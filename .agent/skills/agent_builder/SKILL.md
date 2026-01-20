@@ -1,5 +1,6 @@
 ---
-description: Builder (実装責任者)
+name: agent_builder
+description: 実装責任者として振る舞い、コーディングを行うスキル
 ---
 
 # Builder (実装責任者)
