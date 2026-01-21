@@ -31,16 +31,16 @@
 
 ### Login (`useLogin` + `login/page.tsx`)
 
-- [ ] **Email/Password Validation**
-    - [ ] Signupと同様の必須・形式・長さチェックが機能すること。
-- [ ] **API Error Handling**
-    - [ ] 認証エラー: "Invalid login credentials" の場合、「無効なメールアドレスまたはパスワードです。」と表示されること。
-    - [ ] 未確認エラー: "Email not confirmed" の場合、「メール認証が完了していません。受信したメールから認証をおこなってください。」が表示されること。
-    - [ ] その他のエラー: エラー発生時に汎用的なエラーメッセージ（例: 「ログイン中にエラーが発生しました」）が表示されること。
-- [ ] **Success Flow**
-    - [ ] 成功時: 前述の「Test Account」を用いてログインし、`/main` へリダイレクトされること。
-- [ ] **Loading State**
-    - [ ] 送信中: ボタンのラベルが「ログイン中...」になり、無効化されること。
+- [x] **Email/Password Validation**
+    - [x] Signupと同様の必須・形式・長さチェックが機能すること。
+- [x] **API Error Handling**
+    - [x] 認証エラー: "Invalid login credentials" の場合、「無効なメールアドレスまたはパスワードです。」と表示されること。
+    - [x] 未確認エラー: "Email not confirmed" の場合、「メール認証が完了していません。受信したメールから認証をおこなってください。」が表示されること。
+    - [x] その他のエラー: エラー発生時に汎用的なエラーメッセージ（例: 「ログイン中にエラーが発生しました」）が表示されること。
+- [x] **Success Flow**
+    - [x] 成功時: 前述の「Test Account」を用いてログインし、`/main` へリダイレクトされること。
+- [x] **Loading State**
+    - [x] 送信中: ボタンのラベルが「ログイン中...」になり、無効化されること。
 
 ### Verified Page (`useVerificationProtection` + `verified/page.tsx`)
 
@@ -63,10 +63,10 @@
 - [x] 完了アラートが表示され、承認後に `/login` へ遷移することを確認。
 
 ### Scenario 2: Login Flow
-- [ ] `/login` にアクセスする。
-- [ ] 登録されていない（または誤った）情報を入力して送信。「メールアドレスまたは...」のエラー確認。
-- [ ] 前述の「Test Account」を用いてログインし、/main へ遷移することを確認。
-- [ ] 「ログイン中...」の表示を確認。
+- [x] `/login` にアクセスする。
+- [x] 登録されていない（または誤った）情報を入力して送信。「メールアドレスまたは...」のエラー確認。
+- [x] 前述の「Test Account」を用いてログインし、/main へ遷移することを確認。
+- [x] 「ログイン中...」の表示を確認。
 
 
 ### Scenario 3: Verified Page Assurance
@@ -79,6 +79,6 @@
 検証担当者（QA Master）は、以下のスクリーンショットと現状を比較してください。
 
 - [x] **Signup Page**: 入力フォーム、ボタン、リンクの配置。
-- [ ] **Login Page**: 同上。
+- [x] **Login Page**: 同上。
 - [ ] **Verified Page**: メッセージの配置。
 - [ ] **Error States**: バリデーションエラー表示時のレイアウト（ズレていないか）。

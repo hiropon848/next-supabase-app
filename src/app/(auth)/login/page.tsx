@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   CardContent,
@@ -9,94 +8,12 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { FormInput } from '@/components/ui/form-input';
-import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
+import { useLogin } from '@/hooks/auth/useLogin';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [emailError, setEmailError] = useState<string | null>(null);
-  const [passwordError, setPasswordError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const supabase = createClient();
-
-  const validateForm = () => {
-    let isValid = true;
-    setEmailError(null);
-    setPasswordError(null);
-
-    if (!email) {
-      setEmailError('メールアドレスを入力してください');
-      isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailError('有効なメールアドレスを入力してください');
-      isValid = false;
-    }
-
-    if (!password) {
-      setPasswordError('パスワードを入力してください');
-      isValid = false;
-    } else if (password.length < 6) {
-      setPasswordError('パスワードは6文字以上で入力してください');
-      isValid = false;
-    }
-
-    return isValid;
-  };
-
-  const handleChange = (field: 'email' | 'password', value: string) => {
-    if (field === 'email') {
-      setEmail(value);
-      if (emailError) setEmailError(null);
-    } else {
-      setPassword(value);
-      if (passwordError) setPasswordError(null);
-    }
-  };
-
-  const handleBlur = (field: 'email' | 'password') => {
-    if (field === 'email') {
-      if (!email) {
-        setEmailError('メールアドレスを入力してください');
-      } else if (!/\S+@\S+\.\S+/.test(email)) {
-        setEmailError('有効なメールアドレスを入力してください');
-      }
-    } else {
-      if (!password) {
-        setPasswordError('パスワードを入力してください');
-      } else if (password.length < 6) {
-        setPasswordError('パスワードは6文字以上で入力してください');
-      }
-    }
-  };
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-    setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      let errorMessage = error.message;
-      if (error.message.includes('Invalid login credentials')) {
-        errorMessage = '無効なメールアドレスまたはパスワードです。';
-      } else if (error.message.includes('Email not confirmed')) {
-        errorMessage =
-          'メール認証が完了していません。受信したメールから認証をおこなってください。';
-      } else if (error.message.includes('Too many requests')) {
-        errorMessage =
-          'リクエスト上限に達しています。時間をおいて再度送信してください。';
-      }
-      alert(`エラー: ${errorMessage}`);
-    } else {
-      router.push('/main');
-    }
-    setLoading(false);
-  };
+  const { formState, errors, loading, handlers } = useLogin();
 
   const handleSignUp = () => {
     router.push('/signup');
@@ -113,26 +30,30 @@ export default function LoginPage() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleLogin} className="grid gap-6 px-1" noValidate>
+        <form
+          onSubmit={handlers.handleSubmit}
+          className="grid gap-6 px-1"
+          noValidate
+        >
           <FormInput
             id="email"
             type="email"
             label="メールアドレス"
             placeholder="name@example.com"
-            value={email}
-            onChange={(value) => handleChange('email', value)}
-            onBlur={() => handleBlur('email')}
-            error={emailError}
+            value={formState.email}
+            onChange={(value) => handlers.handleChange('email', value)}
+            onBlur={() => handlers.handleBlur('email')}
+            error={errors.email}
             required
           />
           <FormInput
             id="password"
             type="password"
             label="パスワード"
-            value={password}
-            onChange={(value) => handleChange('password', value)}
-            onBlur={() => handleBlur('password')}
-            error={passwordError}
+            value={formState.password}
+            onChange={(value) => handlers.handleChange('password', value)}
+            onBlur={() => handlers.handleBlur('password')}
+            error={errors.password}
             required
           />
           <div className="mt-4 flex flex-col gap-3">
