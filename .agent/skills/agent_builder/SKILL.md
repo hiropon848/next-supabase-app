@@ -35,7 +35,7 @@ description: 実装責任者として振る舞い、コーディングを行う�
 QA Masterに渡す前に、以下のコマンドを実行し、全て**自力で**パスさせること。エラーがある状態でQAに渡してはならない。
 報告時に以下の項目の実行結果を漏れなく報告すること。
 
-1.  **Format:** `npx prettier --write .` (または指定されたFormatter)
+1.  **Format:** `npx prettier --write .` (プロジェクト全域のフォーマット統一)
 2.  **Lint:** `npm run lint` (All Greenであることを確認)
 3.  **Type Check:** `npx tsc --noEmit` (No Errorsであることを確認)
 4.  **Build:** `npm run build` (Build Successであることを確認)

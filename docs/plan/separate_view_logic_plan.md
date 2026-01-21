@@ -76,19 +76,19 @@ src/
 3.  [x] **Verify** [/agent_qa_master]: Phase 3.1 で更新された `docs/test/separate_view_logic_test_cases.md` の "Behavioral Regression (Signup Logic)" および "Visual Regression" テストを実行し、すべての合格基準を満たすことを確認する。
 
 ### Phase 3.4: Login Refactoring
-1.  [x] **Create Hook** [/agent_builder]: `src/hooks/auth/useLogin.ts` を作成し、`login/page.tsx` からロジックを移設。
-2.  [x] **Refactor View** [/agent_builder]: `src/app/(auth)/login/page.tsx` を修正し、Hook を利用する形に変更。
-3.  [x] **Verify** [/agent_qa_master]: Phase 3.1 で更新された `docs/test/separate_view_logic_test_cases.md` の "Behavioral Regression (Login Logic)" および "Visual Regression" テストを実行し、すべての合格基準を満たすことを確認する。
+1.  [x] **Create Hook**: `.agent/skills/agent_builder/SKILL.md` を一言一句読み直し、agent_builder の定義に従って `src/hooks/auth/useLogin.ts` を作成し、`login/page.tsx` からロジックを移設。
+2.  [x] **Refactor View**: `.agent/skills/agent_builder/SKILL.md` を一言一句読み直し、agent_builder の定義に従って `src/app/(auth)/login/page.tsx` を修正し、Hook を利用する形に変更。
+3.  [x] **Verify**: `.agent/skills/agent_qa_master/SKILL.md` を一言一句読み直し、agent_qa_master の定義に従って Phase 3.1 で更新された `docs/test/separate_view_logic_test_cases.md` の "Behavioral Regression (Login Logic)" および "Visual Regression" テストを実行し、すべての合格基準を満たすことを確認する。
 
 ### Phase 3.5: Verification Page Refactoring
-1.  [ ] **Create Hook** [/agent_builder]: `src/hooks/auth/useVerificationProtection.ts` を作成。
-2.  [ ] **Refactor View** [/agent_builder]: `src/app/(auth)/verified/page.tsx` を修正。
-3.  [ ] **Verify** [/agent_qa_master]: Phase 3.1 で更新された `docs/test/separate_view_logic_test_cases.md` の "Verified Page Logic" および "Visual Regression" テストを実行し、すべての合格基準を満たすことを確認する。
+1.  [ ] **Create Hook**: `.agent/skills/agent_builder/SKILL.md` を一言一句読み直し、agent_builder の定義に従って `src/hooks/auth/useVerificationProtection.ts` を作成。
+2.  [ ] **Refactor View**: `.agent/skills/agent_builder/SKILL.md` を一言一句読み直し、agent_builder の定義に従って `src/app/(auth)/verified/page.tsx` を修正。
+3.  [ ] **Verify**: `.agent/skills/agent_qa_master/SKILL.md` を一言一句読み直し、agent_qa_master の定義に従って Phase 3.1 で更新された `docs/test/separate_view_logic_test_cases.md` の "Verified Page Logic" および "Visual Regression" テストを実行し、すべての合格基準を満たすことを確認する。
 
 ## Verification Plan
 
 ### Manual Verification
 リファクタリング前後で挙動が変わらないこと（回帰テスト）を確認します。
 
-1.  [ ] **Regression Testing** [/agent_qa_master]: `docs/test/separate_view_logic_test_cases.md` の全シナリオを再実行。
-2.  [ ] **UI Integrity** [/agent_qa_master]: Phase 3.1 で取得した Baseline と現在の画面を比較し、ピクセルパーフェクト（または意図した通りの維持）であることを確認。
+1.  [ ] **Regression Testing**: `.agent/skills/agent_qa_master/SKILL.md` を一言一句読み直し、agent_qa_master の定義に従って `docs/test/separate_view_logic_test_cases.md` の全シナリオを再実行。
+2.  [ ] **UI Integrity**: `.agent/skills/agent_qa_master/SKILL.md` を一言一句読み直し、agent_qa_master の定義に従って Phase 3.1 で取得した Baseline と現在の画面を比較し、ピクセルパーフェクト（または意図した通りの維持）であることを確認。

@@ -40,7 +40,7 @@ description: Test Engineer (テスト設計責任者)
 
 ## Mandatory Verification Item (必須検証項目)
 すべてのテストケース設計において、機能動作の確認だけでなく、以下の**静的解析コマンドのパス**を必須の合格条件として含めなければならない。
-- `npx prettier --check .` (Formatting check)
+- `npx prettier --check .` (Formatting check。引数指定は禁止)
 - `npm run lint` (Lint check)
 - `npx tsc --noEmit` (Type check)
 - `npm run build` (Build check)

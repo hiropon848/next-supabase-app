@@ -1,8 +1,7 @@
 'use client';
 
-import { useEffect, Suspense } from 'react';
+import { Suspense } from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
 import {
   CardContent,
   CardDescription,
@@ -10,21 +9,13 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { useVerificationProtection } from '@/hooks/auth/useVerificationProtection';
 
 function VerifiedContent() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    // URLパラメータに verified=true がない場合はログイン画面へリダイレクト
-    // (不正な直接アクセスを防止)
-    if (!searchParams.get('verified')) {
-      router.replace('/login');
-    }
-  }, [searchParams, router]);
+  const { isAuthorized } = useVerificationProtection();
 
   // リダイレクト中は何も表示しない（チラつき防止）
-  if (!searchParams.get('verified')) {
+  if (!isAuthorized) {
     return null;
   }
 
