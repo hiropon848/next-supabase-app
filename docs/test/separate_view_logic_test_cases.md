@@ -44,11 +44,21 @@
 
 ### Verified Page (`useVerificationProtection` + `verified/page.tsx`)
 
-- [ ] **Access Protection**
-    - [ ] URLパラメータ `verified=true` がない場合、`/login` にリダイレクトされること。
-    - [ ] リダイレクト中、画面が一瞬表示されないこと（`return null`）。
-- [ ] **Display**
-    - [ ] 正規アクセス時（`verified=true`）、登録完了メッセージが表示されること。
+- [ ] **Access Protection (不正アクセスのガード)**
+    - [ ] **手順A: パラメータなしアクセス**
+        - ブラウザで `http://localhost:3000/verified` にアクセスする。
+        - **確認事項1 (Redirect)**: 最終的なURLが `/login` になっていること。（※現在 `/signup` に飛ぶバグあり。要修正）
+        - **確認事項2 (No Flash)**: ロード中、一瞬でも「認証完了」等の画面が表示されず、完全に非表示 (`return null`) のまま遷移すること。
+    - [ ] **手順B: 無効なパラメータアクセス**
+        - ブラウザで `http://localhost:3000/verified?verified=false` や `?foo=bar` にアクセスする。
+        - **確認事項**: 手順Aと同様に、`/signup` にリダイレクトされること。
+- [ ] **Display (正規アクセスの表示)**
+    - [ ] **手順: 正規アクセス**
+        - ブラウザで `http://localhost:3000/verified?verified=true` にアクセスする。
+        - **確認事項**: リダイレクトされず、以下の要素が表示されること。
+            - タイトル: 「認証完了」
+            - 説明文: 「認証が完了しました。ログイン画面からログインしてください。」
+            - ボタン: 「ログイン画面へ」
 
 ## 2. Behavioral Regression Test (Manual Operation)
 

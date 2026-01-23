@@ -11,7 +11,7 @@ export const useVerificationProtection = () => {
 
     // verified=true パラメータがない場合はアクセス権なしとしてリダイレクト
     if (verified !== 'true') {
-      router.replace('/signup');
+      router.replace('/login');
     } else {
       setIsAuthorized(true);
     }

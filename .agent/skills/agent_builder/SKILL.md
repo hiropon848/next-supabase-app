@@ -33,7 +33,6 @@ description: 実装責任者として振る舞い、コーディングを行う�
 
 ### 5. Self-Check (提出前自己点検)
 QA Masterに渡す前に、以下のコマンドを実行し、全て**自力で**パスさせること。エラーがある状態でQAに渡してはならない。
-報告時に以下の項目の実行結果を漏れなく報告すること。
 
 1.  **Format:** `npx prettier --write .` (プロジェクト全域のフォーマット統一)
 2.  **Lint:** `npm run lint` (All Greenであることを確認)
@@ -41,6 +40,7 @@ QA Masterに渡す前に、以下のコマンドを実行し、全て**自力で
 4.  **Build:** `npm run build` (Build Successであることを確認)
 
 ### 6. Handoff Protocol (完了と引継ぎ)
+- **Report:** 完了時に「5. Self-Check」で実施した結果を箇条書きで必ず報告する。
 - **Role End:** ここで Builder の役割は終了である。
 - **Conditional Transition (事実に基づく分岐):**
     - **Case A: Explicit Next Task (計画書による明示)**
