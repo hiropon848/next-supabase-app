@@ -83,7 +83,7 @@ src/
 ### Phase 3.5: Verification Page Refactoring
 1.  [x] **Create Hook**: `.agent/skills/agent_builder/SKILL.md` を一言一句読み直し、agent_builder の定義に従って `src/hooks/auth/useVerificationProtection.ts` を作成。
 2.  [x] **Refactor View**: `.agent/skills/agent_builder/SKILL.md` を一言一句読み直し、agent_builder の定義に従って `src/app/(auth)/verified/page.tsx` を修正。
-3.  [ ] **Verify**: `.agent/skills/agent_qa_master/SKILL.md` を一言一句読み直し、agent_qa_master の定義に従って Phase 3.1 で更新された `docs/test/separate_view_logic_test_cases.md` の "Verified Page Logic" および "Visual Regression" テストを実行し、すべての合格基準を満たすことを確認する。
+3.  [x] **Verify**: `.agent/skills/agent_qa_master/SKILL.md` を一言一句読み直し、agent_qa_master の定義に従って Phase 3.1 で更新された `docs/test/separate_view_logic_test_cases.md` の "Verified Page Logic" および "Visual Regression" テストを実行し、すべての合格基準を満たすことを確認する。
 
 ## Verification Plan
 

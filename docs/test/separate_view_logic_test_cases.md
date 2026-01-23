@@ -44,16 +44,16 @@
 
 ### Verified Page (`useVerificationProtection` + `verified/page.tsx`)
 
-- [ ] **Access Protection (不正アクセスのガード)**
-    - [ ] **手順A: パラメータなしアクセス**
+- [x] **Access Protection (不正アクセスのガード)**
+    - [x] **手順A: パラメータなしアクセス**
         - ブラウザで `http://localhost:3000/verified` にアクセスする。
         - **確認事項1 (Redirect)**: 最終的なURLが `/login` になっていること。（※現在 `/signup` に飛ぶバグあり。要修正）
         - **確認事項2 (No Flash)**: ロード中、一瞬でも「認証完了」等の画面が表示されず、完全に非表示 (`return null`) のまま遷移すること。
-    - [ ] **手順B: 無効なパラメータアクセス**
+    - [x] **手順B: 無効なパラメータアクセス**
         - ブラウザで `http://localhost:3000/verified?verified=false` や `?foo=bar` にアクセスする。
-        - **確認事項**: 手順Aと同様に、`/signup` にリダイレクトされること。
-- [ ] **Display (正規アクセスの表示)**
-    - [ ] **手順: 正規アクセス**
+        - **確認事項**: 手順Aと同様に、`/login` にリダイレクトされること。
+- [x] **Display (正規アクセスの表示)**
+    - [x] **手順: 正規アクセス**
         - ブラウザで `http://localhost:3000/verified?verified=true` にアクセスする。
         - **確認事項**: リダイレクトされず、以下の要素が表示されること。
             - タイトル: 「認証完了」
@@ -80,8 +80,8 @@
 
 
 ### Scenario 3: Verified Page Assurance
-- [ ] クエリパラメータなしで `/verified` に直接アクセスする -> `/login` に飛ばされること。
-- [ ] `/verified?verified=true` にアクセスする -> ページが正しく表示されること。
+- [x] クエリパラメータなしで `/verified` に直接アクセスする -> `/login` に飛ばされること。
+- [x] `/verified?verified=true` にアクセスする -> ページが正しく表示されること。
 
 ## 3. Visual Regression Test
 
@@ -90,5 +90,5 @@
 
 - [x] **Signup Page**: 入力フォーム、ボタン、リンクの配置。
 - [x] **Login Page**: 同上。
-- [ ] **Verified Page**: メッセージの配置。
-- [ ] **Error States**: バリデーションエラー表示時のレイアウト（ズレていないか）。
+- [x] **Verified Page**: メッセージの配置。
+- [x] **Error States**: バリデーションエラー表示時のレイアウト（ズレていないか）。
